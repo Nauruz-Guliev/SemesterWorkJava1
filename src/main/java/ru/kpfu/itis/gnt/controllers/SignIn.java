@@ -33,7 +33,7 @@ public class SignIn extends HttpServlet{
         String password = req.getParameter("password");
 
         try {
-            SecurityService securityService = new SecurityService((UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute("USERDAO"));
+            SecurityService securityService = new SecurityService(getServletContext());
             if(email != null && password != null){
                 if(securityService.signIn(req, email, Encrypter.md5Hex(password))){
                     resp.sendRedirect(getServletContext().getContextPath() + "/profile");

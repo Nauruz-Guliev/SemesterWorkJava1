@@ -10,4 +10,5 @@ public interface PostsRepository {
     Optional<List<Post>> findAllPosts();
     Optional<Post> findPostById(int postId);
     boolean updatePost(Post post);
+    boolean addPost(Post post);
 }

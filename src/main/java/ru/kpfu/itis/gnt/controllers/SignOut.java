@@ -18,7 +18,7 @@ public class SignOut extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            SecurityService securityService = new SecurityService((UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute("USERDAO"));
+            SecurityService securityService = new SecurityService(getServletContext());
             securityService.signOut(req);
             resp.sendRedirect(getServletContext().getContextPath() + "/");
         } catch (DBException e) {

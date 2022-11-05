@@ -15,31 +15,35 @@
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <div class="container-fluid">
-    <div class="collapse navbar-collapse" id="mynavbar">
-        <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="<c:url value="/"/>" class="button">Main page</a>
-            </li>
+        <div class="collapse navbar-collapse" id="mynavbar">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="<c:url value="/"/>" class="button">Main page</a>
+                </li>
 
-            <c:if test="${empty user}">
-                <li class="nav-item"><a class="nav-link" href="<c:url value="/signin"/>" class="button">Sign In</a></li>
-                <li class="nav-item"><a class="nav-link" href="<c:url value="/register"/>" class="button">Register</a></li>
-            </c:if>
-
-
-
-            <c:if test="${not empty user}">
-                <li class="nav-item"><a class="nav-link"href="<c:url value="/profile"/>" class="button">Profile</a></li>
-                <li class="nav-item"><a class="nav-link" href="<c:url value="/signout"/>" class="button">Sign Out</a></li>
-            </c:if>
-            <c:if test="${not empty admin}">
-                <li class="nav-item"><a class="nav-link"href="<c:url value="/admin"/>" class="button">Admin</a></li>
-            </c:if>
+                <c:if test="${empty user}">
+                    <li class="nav-item"><a class="nav-link" href="<c:url value="/signin"/>" class="button">Sign In</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="<c:url value="/register"/>"
+                                            class="button">Register</a></li>
+                </c:if>
 
 
+                <c:if test="${not empty user}">
+                    <li class="nav-item"><a class="nav-link" href="<c:url value="/profile"/>" class="button">Profile</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="<c:url value="/signout"/>" class="button">Sign
+                        Out</a></li>
+                </c:if>
+                <c:if test="${not empty admin}">
+                    <li class="nav-item"><a class="nav-link" href="<c:url value="/admin"/>" class="button">Admin</a>
+                    </li>
+                </c:if>
 
 
-        </ul>
-    </div>
+            </ul>
+        </div>
     </div>
 </nav>
+
+<section style="background-color: #FFFDED; height: 100%">

@@ -33,8 +33,7 @@ public class SecurityFilter extends HttpFilter {
         }
 
         try {
-            UsersRepositoryJDBCTemplateImpl usersRepositoryJDBCTemplate = (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute("USERDAO");
-            SecurityService securityService = new SecurityService(usersRepositoryJDBCTemplate);
+            SecurityService securityService = new SecurityService(getServletContext());
 
             boolean isUserSigned = securityService.isSigned(req);
             if (prot && !isUserSigned) {

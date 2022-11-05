@@ -1,6 +1,8 @@
 package ru.kpfu.itis.gnt.exceptions;
 
-public class DBException extends Exception{
+import java.util.function.Supplier;
+
+public class DBException extends Exception implements Supplier<DBException> {
 
     public DBException(){
         super();
@@ -12,5 +14,10 @@ public class DBException extends Exception{
 
     public DBException(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    @Override
+    public DBException get() {
+        return this;
     }
 }

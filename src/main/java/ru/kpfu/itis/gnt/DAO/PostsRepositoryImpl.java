@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.entities.User;
 
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,10 +19,14 @@ public class PostsRepositoryImpl implements PostsRepository {
     //language=SQL
     private final static String SQL_UPDATE_POST = "UPDATE posts SET title=?, post_body =?, edited_at = current_timestamp where id = ?";
 
+    //language=SQL
+    private final static String SQL_INSERT_POST = "INSERT INTO posts(title, post_body, category_id, author_id)" +
+            "values(?, ? , ?, ?)";
+
     private final JdbcTemplate jdbcTemplate;
 
-    public PostsRepositoryImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public PostsRepositoryImpl(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
@@ -50,6 +55,11 @@ public class PostsRepositoryImpl implements PostsRepository {
     @Override
     public boolean updatePost(Post post) {
         return jdbcTemplate.update(SQL_UPDATE_POST, post.getTitle(), post.getBody(), post.getId()) > 0;
+    }
+
+    @Override
+    public boolean addPost(Post post) {
+        return jdbcTemplate.update(SQL_INSERT_POST, post.getTitle(), post.getCategory_id(), post.getAuthor_id()) > 0;
     }
 
 

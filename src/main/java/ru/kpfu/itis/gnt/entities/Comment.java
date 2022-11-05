@@ -7,8 +7,7 @@ public class Comment {
     private int author_id;
     private String created_at;
 
-    public Comment(int id, String text, int post_id, int author_id) {
-        this.id = id;
+    public Comment( String text, int post_id, int author_id) {
         this.text = text;
         this.post_id = post_id;
         this.author_id = author_id;

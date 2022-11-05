@@ -23,9 +23,8 @@ public class AdminPageFilter extends HttpFilter {
         if (req.getRequestURI().substring(req.getContextPath().length()).equals("/admin")) {
             isAdminPage = true;
         }
-        UsersRepositoryJDBCTemplateImpl usersRepositoryJDBCTemplate = (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute("USERDAO");
         try {
-            SecurityService securityService = new SecurityService(usersRepositoryJDBCTemplate);
+            SecurityService securityService = new SecurityService(getServletContext());
             boolean isAdminSigned = securityService.isAdminSigned(req);
             if (isAdminPage && !isAdminSigned) {
                 res.sendRedirect(req.getContextPath() + "/main");

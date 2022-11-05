@@ -7,6 +7,7 @@ import ru.kpfu.itis.gnt.exceptions.DBException;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 public class SecurityService {
@@ -15,8 +16,8 @@ public class SecurityService {
     private static final String ADMIN = "admin";
     private static final String USER_ID = "ID";
 
-    public SecurityService(UsersRepositoryJDBCTemplateImpl userDAO) throws DBException {
-        this.userDAO = userDAO;
+    public SecurityService(ServletContext context) throws DBException {
+        this.userDAO = (UsersRepositoryJDBCTemplateImpl) context.getAttribute("USERDAO");
     }
 
     public Map<String, Object> getAccountInfo(HttpServletRequest req) {
@@ -41,7 +42,6 @@ public class SecurityService {
     }
 
     public boolean signIn(HttpServletRequest req, String email, String password) throws DBException {
-
         if (userDAO.findUser(email, password).isPresent()) {
             User user = userDAO.findUser(email, password).get();
             req.getSession().setAttribute(EMAIL, user.getEmail());
