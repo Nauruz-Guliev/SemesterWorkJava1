@@ -1,5 +1,7 @@
 package ru.kpfu.itis.gnt.entities;
 
+import java.util.Objects;
+
 public class Post {
     private int id;
     private String title;
@@ -63,5 +65,30 @@ public class Post {
 
     public void setCategory_id(int category_id) {
         this.category_id = category_id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Post)) return false;
+        Post post = (Post) o;
+        return getId() == post.getId() && getLikes() == post.getLikes() && getAuthor_id() == post.getAuthor_id() && getCategory_id() == post.getCategory_id() && Objects.equals(getTitle(), post.getTitle()) && Objects.equals(getBody(), post.getBody());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getTitle(), getBody(), getLikes(), getAuthor_id(), getCategory_id());
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                ", likes=" + likes +
+                ", author_id=" + author_id +
+                ", category_id=" + category_id +
+                '}';
     }
 }

@@ -1,10 +1,8 @@
 package ru.kpfu.itis.gnt.filters;
 
 
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import ru.kpfu.itis.gnt.DAO.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.exceptions.DBException;
-import ru.kpfu.itis.gnt.services.SecurityService;
+import ru.kpfu.itis.gnt.services.UsersAuthenticationService;
 
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -17,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebFilter("/*")
 public class SecurityFilter extends HttpFilter {
-    protected final String[] protectedPaths = {"/profile"};
+    protected final String[] protectedPaths = {"/profile", "/comment"};
 
     private final static String USER = "user";
 
@@ -33,18 +31,18 @@ public class SecurityFilter extends HttpFilter {
         }
 
         try {
-            SecurityService securityService = new SecurityService(getServletContext());
+            UsersAuthenticationService usersAuthenticationService = new UsersAuthenticationService(getServletContext());
 
-            boolean isUserSigned = securityService.isSigned(req);
+            boolean isUserSigned = usersAuthenticationService.isSigned(req);
             if (prot && !isUserSigned) {
                 res.sendRedirect(req.getContextPath() + "/main");
             }  else {
                 if (isUserSigned) {
-                    req.setAttribute(USER, securityService.getAccountInfo(req));
+                    req.setAttribute(USER, usersAuthenticationService.getAccountInfo(req));
                 }
                 chain.doFilter(req, res);
             }
-        } catch (DBException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

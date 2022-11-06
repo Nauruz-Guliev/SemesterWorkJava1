@@ -1,5 +1,6 @@
 package ru.kpfu.itis.gnt.listener;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import ru.kpfu.itis.gnt.DAO.CommentsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.DataSource;
@@ -33,6 +34,7 @@ public class AppContextListener implements ServletContextListener {
         servletContextEvent.getServletContext().setAttribute("COMMENTS_DAO", commentsDao);
         servletContextEvent.getServletContext().setAttribute("USERDAO", userDAO);
         servletContextEvent.getServletContext().setAttribute("CONNECTION", dataSource);
+        servletContextEvent.getServletContext().setAttribute("OBJECT_MAPPER", new ObjectMapper());
     }
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {

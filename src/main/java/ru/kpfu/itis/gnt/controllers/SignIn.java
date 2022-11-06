@@ -2,16 +2,11 @@ package ru.kpfu.itis.gnt.controllers;
 
 
 
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import ru.kpfu.itis.gnt.DAO.DataSource;
-import ru.kpfu.itis.gnt.DAO.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.Utils.Encrypter;
 import ru.kpfu.itis.gnt.exceptions.DBException;
-import ru.kpfu.itis.gnt.services.SecurityService;
+import ru.kpfu.itis.gnt.services.UsersAuthenticationService;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,9 +28,9 @@ public class SignIn extends HttpServlet{
         String password = req.getParameter("password");
 
         try {
-            SecurityService securityService = new SecurityService(getServletContext());
+            UsersAuthenticationService usersAuthenticationService = new UsersAuthenticationService(getServletContext());
             if(email != null && password != null){
-                if(securityService.signIn(req, email, Encrypter.md5Hex(password))){
+                if(usersAuthenticationService.signIn(req, email, Encrypter.md5Hex(password))){
                     resp.sendRedirect(getServletContext().getContextPath() + "/profile");
                     return;
                 }

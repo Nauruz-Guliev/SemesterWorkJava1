@@ -12,7 +12,7 @@ public interface UsersRepository {
     boolean deleteUser(int userId);
 
     boolean updateCountry(String country, int userId);
-    Optional<User> findById(Long id);
+    Optional<User> findById(int id);
 
     Optional<User> findUser(String email, String password);
 }

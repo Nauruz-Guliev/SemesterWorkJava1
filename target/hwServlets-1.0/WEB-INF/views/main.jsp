@@ -3,6 +3,7 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 
+
 <c:forEach begin="0" end="${fn:length(postsList) - 1}" var="i">
     <div class="container-fluid table-bordered">
         <div class="row">

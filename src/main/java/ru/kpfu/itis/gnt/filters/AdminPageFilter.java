@@ -1,9 +1,7 @@
 package ru.kpfu.itis.gnt.filters;
 
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import ru.kpfu.itis.gnt.DAO.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.exceptions.DBException;
-import ru.kpfu.itis.gnt.services.SecurityService;
+import ru.kpfu.itis.gnt.services.UsersAuthenticationService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -24,17 +22,17 @@ public class AdminPageFilter extends HttpFilter {
             isAdminPage = true;
         }
         try {
-            SecurityService securityService = new SecurityService(getServletContext());
-            boolean isAdminSigned = securityService.isAdminSigned(req);
+            UsersAuthenticationService usersAuthenticationService = new UsersAuthenticationService(getServletContext());
+            boolean isAdminSigned = usersAuthenticationService.isAdminSigned(req);
             if (isAdminPage && !isAdminSigned) {
                 res.sendRedirect(req.getContextPath() + "/main");
             } else {
                 if (isAdminSigned) {
-                    req.setAttribute("admin", securityService.getAccountInfo(req));
+                    req.setAttribute("admin", usersAuthenticationService.getAccountInfo(req));
                 }
                 chain.doFilter(req, res);
             }
-        } catch (DBException | IOException | ServletException e) {
+        } catch (IOException | ServletException e) {
             throw new RuntimeException(e);
         }
     }

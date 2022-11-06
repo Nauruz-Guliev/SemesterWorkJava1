@@ -67,7 +67,7 @@ public class CommentsRepositoryImpl implements CommentsRepository {
                         row.getInt("post_id"),
                         row.getInt("author_id")
                 );
-                comment.setCreated_at(row.getString("create_at"));
+                comment.setCreated_at(row.getString("created_at"));
                 comment.setId(row.getInt("id"));
                 return comment;
             };

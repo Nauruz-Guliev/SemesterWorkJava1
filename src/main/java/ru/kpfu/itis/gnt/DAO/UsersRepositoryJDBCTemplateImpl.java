@@ -17,7 +17,7 @@ public class UsersRepositoryJDBCTemplateImpl implements UsersRepository {
 
 
     private final JdbcTemplate jdbcTemplate;
-   // private final SimpleJdbcInsert insert;
+    // private final SimpleJdbcInsert insert;
     //language=SQL
     private static final String SQL_INSERT_USER = "insert into users(firstname, lastname, email, password, country, gender, dateofbirth)" +
             "values (?,?,?,?,?,?,TO_DATE(?,'YYYYMMDD'))";
@@ -34,9 +34,12 @@ public class UsersRepositoryJDBCTemplateImpl implements UsersRepository {
     //language=SQL
     private static final String SQL_CHANGE_USER_COUNTRY = "UPDATE users SET country = ? where id=?";
 
+    //language=SQL
+    private static final String SQL_GET_USER_BY_ID = "SELECT * from users where id=?";
+
     public UsersRepositoryJDBCTemplateImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-       // this.insert = new SimpleJdbcInsert(jdbcTemplate);
+        // this.insert = new SimpleJdbcInsert(jdbcTemplate);
     }
 
     @Override
@@ -73,8 +76,12 @@ public class UsersRepositoryJDBCTemplateImpl implements UsersRepository {
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        return Optional.empty();
+    public Optional<User> findById(int id) {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_GET_USER_BY_ID, new Object[]{id}, userMapper));
+        } catch (EmptyResultDataAccessException ex) {
+            return Optional.empty();
+        }
     }
 
     @Override
