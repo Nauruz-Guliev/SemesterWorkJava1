@@ -1,4 +1,4 @@
-package ru.kpfu.itis.gnt.DAO;
+package ru.kpfu.itis.gnt.DAO.implementations;
 
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 

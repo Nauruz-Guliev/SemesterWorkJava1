@@ -1,15 +1,17 @@
-package ru.kpfu.itis.gnt.services;
+package ru.kpfu.itis.gnt.services.implementations;
 
-import ru.kpfu.itis.gnt.DAO.CommentsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.PostsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.CommentsRepositoryImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.entities.Comment;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
+import ru.kpfu.itis.gnt.services.CommentsService;
 
 import javax.servlet.ServletContext;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CommentsServiceImpl implements CommentsService {
@@ -50,12 +52,13 @@ public class CommentsServiceImpl implements CommentsService {
      У каждого комментария обязательно найдётся автор, так как в бд комментарий не может
      храниться без привязки к автору.
      */
-    public List<User> getCommentAuthors(List<Comment> comments) {
-        ArrayList<User> commentAuthors = new ArrayList<>();
-        for (Comment comment : comments) {
+    public HashMap<Comment, User> getCommentAuthors(List<Comment> comments) {
 
-            commentAuthors.add(userDao.findById(comment.getAuthor_id()).get());
+        HashMap<Comment, User> commentUserHashMap = new HashMap<>();
+        for (Comment comment : comments) {
+            commentUserHashMap.put(comment, userDao.findById(comment.getAuthor_id()).get());
+
         }
-        return commentAuthors;
+        return commentUserHashMap;
     }
 }

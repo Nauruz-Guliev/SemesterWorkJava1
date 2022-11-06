@@ -1,6 +1,6 @@
-package ru.kpfu.itis.gnt.services;
+package ru.kpfu.itis.gnt.services.implementations;
 
-import ru.kpfu.itis.gnt.DAO.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 
@@ -13,9 +13,9 @@ public class UsersAuthenticationService {
     private UsersRepositoryJDBCTemplateImpl userDAO;
     private static final String EMAIL = "email";
     private static final String ADMIN = "admin";
-    private static final String USER_ID = "ID";
+    private static final String USER_ID = "USER_ID";
 
-    public UsersAuthenticationService(ServletContext context){
+    public UsersAuthenticationService(ServletContext context) {
         this.userDAO = (UsersRepositoryJDBCTemplateImpl) context.getAttribute("USERDAO");
     }
 
@@ -57,5 +57,11 @@ public class UsersAuthenticationService {
         req.getSession().removeAttribute(EMAIL);
         req.getSession().removeAttribute(USER_ID);
         if (req.getSession().getAttribute(ADMIN) != null) req.getSession().removeAttribute(ADMIN);
+    }
+
+    public User findUserById(int userId) throws DBException {
+        return userDAO.findById(userId).orElseThrow(
+                () -> new DBException("User was not found")
+        );
     }
 }

@@ -1,8 +1,7 @@
 package ru.kpfu.itis.gnt.controllers;
 
 
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import ru.kpfu.itis.gnt.DAO.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.Utils.Encrypter;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.validators.RegistrationFieldsValidator;
@@ -15,9 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 @WebServlet("/register")
 public class Registration extends HttpServlet {

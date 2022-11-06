@@ -1,8 +1,7 @@
 package ru.kpfu.itis.gnt.filters;
 
 
-import ru.kpfu.itis.gnt.exceptions.DBException;
-import ru.kpfu.itis.gnt.services.UsersAuthenticationService;
+import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
 
 import java.io.IOException;
 import javax.servlet.FilterChain;

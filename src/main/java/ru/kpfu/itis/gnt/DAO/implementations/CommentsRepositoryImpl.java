@@ -1,9 +1,10 @@
-package ru.kpfu.itis.gnt.DAO;
+package ru.kpfu.itis.gnt.DAO.implementations;
 
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import ru.kpfu.itis.gnt.DAO.CommentsRepository;
 import ru.kpfu.itis.gnt.entities.Comment;
 
 import javax.xml.crypto.Data;
@@ -17,7 +18,7 @@ public class CommentsRepositoryImpl implements CommentsRepository {
     private final JdbcTemplate jdbcTemplate;
 
     //language=SQL
-    private static final String SQL_GET_ALL_COMMENTS = "SELECT * FROM comments where post_id =?";
+    private static final String SQL_GET_ALL_COMMENTS = "SELECT * FROM comments where post_id =? order by created_at asc ";
 
     //language=SQL
     private static final String SQL_ADD_COMMENT = "INSERT INTO comments(text, post_id, author_id)" +

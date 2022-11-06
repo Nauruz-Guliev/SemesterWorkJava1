@@ -46,3 +46,5 @@ CREATE TABLE TAGS(
     UNIQUE (post_id, tag_title)
 );
 
+
+TRUNCATE TABLE comments;

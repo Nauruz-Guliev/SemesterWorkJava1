@@ -1,6 +1,6 @@
 package ru.kpfu.itis.gnt.controllers;
 
-import ru.kpfu.itis.gnt.DAO.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.entities.User;
 
 import javax.servlet.ServletException;

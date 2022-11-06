@@ -1,10 +1,11 @@
-package ru.kpfu.itis.gnt.DAO;
+package ru.kpfu.itis.gnt.DAO.implementations;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import ru.kpfu.itis.gnt.DAO.UsersRepository;
 import ru.kpfu.itis.gnt.entities.User;
 
 import javax.sql.DataSource;

@@ -1,7 +1,6 @@
 package ru.kpfu.itis.gnt.controllers;
 
-import ru.kpfu.itis.gnt.exceptions.DBException;
-import ru.kpfu.itis.gnt.services.UsersAuthenticationService;
+import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
 
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;

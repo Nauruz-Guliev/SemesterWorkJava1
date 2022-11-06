@@ -31,7 +31,8 @@
                    aria-label="Comment"
                    aria-describedby="basic-addon2">
             <div class="input-group-append">
-                <input onclick="addComment( ${post.id}, document.getElementById('comment').value)" type="submit" value="Add"
+                <input onclick="addComment( ${post.id}, document.getElementById('comment').value)" type="submit"
+                       value="Add"
                        class="btn btn-dark">
             </div>
         </div>
@@ -45,20 +46,28 @@
     </c:if>
 
 
-    <c:forEach begin="0" end="${fn:length(commentList) - 1}" var="i">
-        <div class="commentDiv" id="commentDiv">
-
-            <div class="card">
-                <div class="card-body p-2 m-3">
-                    <p>${commentList[i].text}</p>
-                    <div class="d-flex justify-content-between p-2">
-                        <div class="d-flex flex-row">
-                            <p class="small mb-0 ms-2">${commentAuthors[i].firstName} ${commentAuthors[i].lastName}</p>
+    <c:forEach var="entry" items="${commentAuthors}"  >
+        <div id="commentDiv" class="commentDiv">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex flex-start">
+                        <div class="w-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="text-primary fw-bold mb-0">
+                                        ${entry.value.firstName} ${entry.value.lastName}
+                                </h6>
+                                <p class="mb-0">${entry.key.created_at}</p>
+                            </div>
+                            <span class="text-dark ms-2 m-2">${entry.key.text}</span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="small mb-0" style="color: #aaa;"></p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
+            <div></div>
         </div>
     </c:forEach>
+
 </div>

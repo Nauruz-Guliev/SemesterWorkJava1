@@ -2,12 +2,9 @@ package ru.kpfu.itis.gnt.controllers;
 
 
 
-import ru.kpfu.itis.gnt.DAO.PostsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.exceptions.DBException;
-import ru.kpfu.itis.gnt.services.PostsService;
-import ru.kpfu.itis.gnt.services.PostsServiceImpl;
+import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
 
 import java.io.IOException;
 import java.util.List;

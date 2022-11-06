@@ -1,9 +1,9 @@
-package ru.kpfu.itis.gnt.services;
+package ru.kpfu.itis.gnt.services.implementations;
 
-import ru.kpfu.itis.gnt.DAO.UsersRepository;
-import ru.kpfu.itis.gnt.DAO.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.dto.UserSignUp;
 import ru.kpfu.itis.gnt.entities.User;
+import ru.kpfu.itis.gnt.services.UsersService;
 
 public class UsersServiceImpl implements UsersService {
 

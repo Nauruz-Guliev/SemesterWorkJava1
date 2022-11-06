@@ -101,19 +101,17 @@ public class User implements Serializable {
         this.country = country;
     }
 
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof User)) return false;
         User user = (User) o;
-        return firstName.equals(user.firstName) && Objects.equals(lastName, user.lastName) && gender.equals(user.gender) && dateOfBirth.equals(user.dateOfBirth) && country.equals(user.country);
+        return getId() == user.getId() && getEmail().equals(user.getEmail()) && getPassword().equals(user.getPassword());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, gender, dateOfBirth, country);
+        return Objects.hash(getId(), getEmail(), getPassword());
     }
 
     @Override

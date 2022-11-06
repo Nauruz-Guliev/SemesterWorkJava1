@@ -1,5 +1,7 @@
 package ru.kpfu.itis.gnt.entities;
 
+import java.util.Objects;
+
 public class Comment {
     private int id;
     private String text;
@@ -51,5 +53,29 @@ public class Comment {
 
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Comment)) return false;
+        Comment comment = (Comment) o;
+        return getId() == comment.getId() && getPost_id() == comment.getPost_id() && getAuthor_id() == comment.getAuthor_id() && getText().equals(comment.getText());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getText(), getPost_id(), getAuthor_id());
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", post_id=" + post_id +
+                ", author_id=" + author_id +
+                ", created_at='" + created_at + '\'' +
+                '}';
     }
 }

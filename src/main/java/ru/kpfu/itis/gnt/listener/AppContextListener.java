@@ -2,17 +2,14 @@ package ru.kpfu.itis.gnt.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import ru.kpfu.itis.gnt.DAO.CommentsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.DataSource;
-import ru.kpfu.itis.gnt.DAO.PostsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.UsersRepositoryJDBCTemplateImpl;
-import ru.kpfu.itis.gnt.exceptions.DBException;
+import ru.kpfu.itis.gnt.DAO.implementations.CommentsRepositoryImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.DataSource;
+import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 @WebListener
 public class AppContextListener implements ServletContextListener {

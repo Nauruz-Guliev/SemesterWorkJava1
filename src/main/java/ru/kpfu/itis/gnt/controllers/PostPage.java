@@ -1,13 +1,11 @@
 package ru.kpfu.itis.gnt.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.kpfu.itis.gnt.entities.Comment;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
-import ru.kpfu.itis.gnt.services.CommentsServiceImpl;
-import ru.kpfu.itis.gnt.services.PostsServiceImpl;
-import ru.kpfu.itis.gnt.services.UsersAuthenticationService;
+import ru.kpfu.itis.gnt.services.implementations.CommentsServiceImpl;
+import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @WebServlet("/article")
@@ -26,7 +25,7 @@ public class PostPage extends HttpServlet {
     private List<Comment> commentList;
     private User postAuthor;
 
-    private List<User> commentAuthors;
+    private HashMap<Comment, User> commentAuthors;
 
     private PostsServiceImpl postsService;
     private CommentsServiceImpl commentsService;
@@ -40,27 +39,21 @@ public class PostPage extends HttpServlet {
             req.setAttribute("postAuthor", postAuthor);
             req.setAttribute("commentList", commentList);
             req.setAttribute("commentAuthors", commentAuthors);
-            initValues();
 
-        } catch (NumberFormatException ex) {
-
+            getServletContext().getRequestDispatcher("/WEB-INF/views/article.jsp").forward(req, resp);
+        } catch (ServletException | IOException | NumberFormatException | DBException ex) {
+            getServletContext().getRequestDispatcher("/WEB-INF/views/article.jsp").forward(req, resp);
         }
-        getServletContext().getRequestDispatcher("/WEB-INF/views/article.jsp").forward(req, resp);
     }
 
 
-
-    private void initValues() {
+    private void initValues() throws DBException {
         postsService = new PostsServiceImpl(getServletContext());
         commentsService = new CommentsServiceImpl(getServletContext());
-        try {
-            post = postsService.getPostById(postId);
-            postAuthor = postsService.getPostAuthor(post);
-            commentList = commentsService.getAllComments(post);
-            commentAuthors = commentsService.getCommentAuthors(commentList);
-        } catch (DBException e) {
-            throw new RuntimeException(e);
-        }
+        post = postsService.getPostById(postId);
+        postAuthor = postsService.getPostAuthor(post);
+        commentList = commentsService.getAllComments(post);
+        commentAuthors = commentsService.getCommentAuthors(commentList);
     }
 
 }

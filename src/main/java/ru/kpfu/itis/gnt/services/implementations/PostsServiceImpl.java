@@ -1,15 +1,14 @@
-package ru.kpfu.itis.gnt.services;
+package ru.kpfu.itis.gnt.services.implementations;
 
-import ru.kpfu.itis.gnt.DAO.PostsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
+import ru.kpfu.itis.gnt.services.PostsService;
 
 import javax.servlet.ServletContext;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class PostsServiceImpl implements PostsService {
 
@@ -30,7 +29,6 @@ public class PostsServiceImpl implements PostsService {
 
     @Override
     public Post getPostById(int postId) throws DBException {
-
         return postsRepository.findPostById(postId)
                 .orElseThrow(() -> new DBException("Post was not found"));
     }
