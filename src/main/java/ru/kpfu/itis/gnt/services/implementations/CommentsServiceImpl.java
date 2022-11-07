@@ -53,7 +53,6 @@ public class CommentsServiceImpl implements CommentsService {
      храниться без привязки к автору.
      */
     public HashMap<Comment, User> getCommentAuthors(List<Comment> comments) {
-
         HashMap<Comment, User> commentUserHashMap = new HashMap<>();
         for (Comment comment : comments) {
             commentUserHashMap.put(comment, userDao.findById(comment.getAuthor_id()).get());

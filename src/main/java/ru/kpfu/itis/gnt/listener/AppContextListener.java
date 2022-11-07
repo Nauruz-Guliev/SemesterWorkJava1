@@ -10,6 +10,7 @@ import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.sql.SQLException;
 
 @WebListener
 public class AppContextListener implements ServletContextListener {
@@ -35,6 +36,10 @@ public class AppContextListener implements ServletContextListener {
     }
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-
+        try {
+            dataSource.getConnection().close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

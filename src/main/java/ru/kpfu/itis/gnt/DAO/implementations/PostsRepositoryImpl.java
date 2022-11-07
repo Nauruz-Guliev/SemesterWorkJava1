@@ -31,6 +31,11 @@ public class PostsRepositoryImpl implements PostsRepository {
     }
 
     @Override
+    public boolean updatePost(Post post) {
+        return jdbcTemplate.update(SQL_UPDATE_POST, post.getTitle(), post.getBody(), post.getId()) > 0;
+    }
+
+    @Override
     public Optional<List<Post>> findAllPosts() {
         List<Post> postList = jdbcTemplate.query(SQL_GET_ALL_POSTS, postMapper);
         if (!postList.isEmpty()) {
@@ -53,10 +58,7 @@ public class PostsRepositoryImpl implements PostsRepository {
     }
 
 
-    @Override
-    public boolean updatePost(Post post) {
-        return jdbcTemplate.update(SQL_UPDATE_POST, post.getTitle(), post.getBody(), post.getId()) > 0;
-    }
+
 
     @Override
     public boolean addPost(Post post) {

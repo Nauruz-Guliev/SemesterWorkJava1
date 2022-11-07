@@ -74,7 +74,6 @@ public class CommentServlet extends HttpServlet {
                 commentList = commentsService.getAllComments(post);
                 // отображаем только последний
                 Comment comment = commentList.get(commentList.size() - 1);
-                System.out.println(comment);
                 commentAuthor = usersService.findUserById(comment.getAuthor_id());
 
                 CommentObject commentToDisplay = new CommentObject(
