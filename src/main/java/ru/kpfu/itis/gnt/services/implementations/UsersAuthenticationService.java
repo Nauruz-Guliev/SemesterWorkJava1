@@ -3,8 +3,10 @@ package ru.kpfu.itis.gnt.services.implementations;
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
+import ru.kpfu.itis.gnt.validators.RegistrationFieldsValidator;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +17,12 @@ public class UsersAuthenticationService {
     private static final String ADMIN = "admin";
     private static final String USER_ID = "USER_ID";
 
-    public UsersAuthenticationService(ServletContext context) {
-        this.userDAO = (UsersRepositoryJDBCTemplateImpl) context.getAttribute("USERDAO");
+    private List<String> errorList;
+
+    private RegistrationFieldsValidator userValidator;
+
+    public UsersAuthenticationService(UsersRepositoryJDBCTemplateImpl userDAO) {
+        this.userDAO = userDAO;
     }
 
     public Map<String, Object> getAccountInfo(HttpServletRequest req) {
@@ -30,6 +36,44 @@ public class UsersAuthenticationService {
             return account;
         }
         return null;
+    }
+
+    public List<String> updateUser(User user) throws DBException {
+        checkUser(user);
+        if (!errorList.isEmpty()) {
+            return errorList;
+        } else {
+            if (!userDAO.updateUser(user))
+                throw new DBException("Couldn't update user");
+        }
+        return errorList;
+    }
+
+    public void updateCountry(String country, int userId) throws DBException {
+        if (!userDAO.updateCountry(country, userId))
+            throw new DBException("Couldn't update user's country");
+    }
+
+    public List<User> findAll() throws DBException {
+        return userDAO.findAll().orElseThrow(
+                () -> new DBException("Couldn't load all the users")
+        );
+    }
+
+    public void saveUser(User user) throws DBException {
+        if (!userDAO.saveUser(user)) throw new DBException("Couldn't register");
+    }
+
+    private void checkUser(User user) {
+        userValidator = new RegistrationFieldsValidator(
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getGender(),
+                user.getDateOfBirth(),
+                user.getCountry()
+        );
+        errorList = userValidator.getErrorList();
     }
 
     public boolean isSigned(HttpServletRequest req) {

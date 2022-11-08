@@ -37,6 +37,24 @@ public class RegistrationFieldsValidator {
         validateInputs();
     }
 
+    public RegistrationFieldsValidator(String firstName, String lastName, String email,String gender,String dateOfBirth,String country) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.country = country;
+        validateUpdateInputs();
+    }
+
+    private void validateUpdateInputs(){
+        checkFirstName();
+        checkLastName();
+        checkEmail();
+        checkDateOfBirth();
+        checkCountry();
+        checkGender();
+    }
     private void validateInputs() {
         checkFirstName();
         checkLastName();

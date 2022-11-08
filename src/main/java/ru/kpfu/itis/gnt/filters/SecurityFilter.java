@@ -1,6 +1,9 @@
 package ru.kpfu.itis.gnt.filters;
 
 
+import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.constants.ListenerConstants;
+import ru.kpfu.itis.gnt.services.UsersService;
 import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
 
 import java.io.IOException;
@@ -18,6 +21,15 @@ public class SecurityFilter extends HttpFilter {
 
     private final static String USER = "user";
 
+    private  UsersAuthenticationService userService;
+
+    @Override
+    public void init() {
+        userService = new UsersAuthenticationService(
+                (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO)
+        );
+    }
+
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         boolean prot = false;
@@ -30,14 +42,13 @@ public class SecurityFilter extends HttpFilter {
         }
 
         try {
-            UsersAuthenticationService usersAuthenticationService = new UsersAuthenticationService(getServletContext());
 
-            boolean isUserSigned = usersAuthenticationService.isSigned(req);
+            boolean isUserSigned = userService.isSigned(req);
             if (prot && !isUserSigned) {
                 res.sendRedirect(req.getContextPath() + "/main");
             }  else {
                 if (isUserSigned) {
-                    req.setAttribute(USER, usersAuthenticationService.getAccountInfo(req));
+                    req.setAttribute(USER, userService.getAccountInfo(req));
                 }
                 chain.doFilter(req, res);
             }

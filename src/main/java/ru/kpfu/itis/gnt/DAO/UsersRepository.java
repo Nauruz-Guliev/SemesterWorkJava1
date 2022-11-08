@@ -11,6 +11,8 @@ public interface UsersRepository {
 
     boolean deleteUser(int userId);
 
+    boolean updateUser(User user);
+
     boolean updateCountry(String country, int userId);
     Optional<User> findById(int id);
 

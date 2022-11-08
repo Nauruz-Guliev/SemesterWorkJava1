@@ -1,7 +1,10 @@
 package ru.kpfu.itis.gnt.services.implementations;
 
+import ru.kpfu.itis.gnt.DAO.PostsRepository;
+import ru.kpfu.itis.gnt.DAO.UsersRepository;
 import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
@@ -16,9 +19,9 @@ public class PostsServiceImpl implements PostsService {
 
     private final UsersRepositoryJDBCTemplateImpl userDao;
 
-    public PostsServiceImpl(ServletContext context) {
-        this.postsRepository = (PostsRepositoryImpl) context.getAttribute("POSTS_DAO");
-        this.userDao = (UsersRepositoryJDBCTemplateImpl) context.getAttribute("USERDAO");
+    public PostsServiceImpl(PostsRepositoryImpl postsRepository, UsersRepositoryJDBCTemplateImpl userDao) {
+        this.postsRepository = postsRepository;
+        this.userDao = userDao;
     }
 
     @Override

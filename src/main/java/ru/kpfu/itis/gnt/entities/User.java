@@ -29,6 +29,16 @@ public class User implements Serializable {
         role = GENERAL_USER_ROLE;
     }
 
+    public User(String firstName, String lastName, String email, String gender, String dateOfBirth, String country) {
+        this.id = -1;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.country = country;
+    }
+
     public String getRole() {
         return role;
     }

@@ -1,5 +1,7 @@
 package ru.kpfu.itis.gnt.filters;
 
+import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
 
 import javax.servlet.FilterChain;
@@ -15,19 +17,26 @@ public class AdminPageFilter extends HttpFilter {
 
     private boolean isAdminPage;
 
+    private UsersAuthenticationService usersService;
+    @Override
+    public void init() throws ServletException {
+        usersService = new UsersAuthenticationService(
+                (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO)
+        );
+    }
+
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) {
         if (req.getRequestURI().substring(req.getContextPath().length()).equals("/admin")) {
             isAdminPage = true;
         }
         try {
-            UsersAuthenticationService usersAuthenticationService = new UsersAuthenticationService(getServletContext());
-            boolean isAdminSigned = usersAuthenticationService.isAdminSigned(req);
+            boolean isAdminSigned = usersService.isAdminSigned(req);
             if (isAdminPage && !isAdminSigned) {
                 res.sendRedirect(req.getContextPath() + "/main");
             } else {
                 if (isAdminSigned) {
-                    req.setAttribute("admin", usersAuthenticationService.getAccountInfo(req));
+                    req.setAttribute("admin", usersService.getAccountInfo(req));
                 }
                 chain.doFilter(req, res);
             }

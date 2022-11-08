@@ -29,6 +29,8 @@ public class CommentsRepositoryImpl implements CommentsRepository {
     private static final String SQL_DELETE_COMMENT = "DELETE FROM comments where id =?";
 
 
+
+
     public CommentsRepositoryImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }

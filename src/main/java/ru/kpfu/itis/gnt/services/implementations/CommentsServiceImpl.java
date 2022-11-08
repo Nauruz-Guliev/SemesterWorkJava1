@@ -3,6 +3,7 @@ package ru.kpfu.itis.gnt.services.implementations;
 import ru.kpfu.itis.gnt.DAO.implementations.CommentsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.Comment;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.entities.User;
@@ -10,7 +11,6 @@ import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.CommentsService;
 
 import javax.servlet.ServletContext;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,11 +22,10 @@ public class CommentsServiceImpl implements CommentsService {
 
     private final CommentsRepositoryImpl commentsDao;
 
-    public CommentsServiceImpl(ServletContext context) {
-        this.postsDao = (PostsRepositoryImpl) context.getAttribute("POSTS_DAO");
-        this.userDao = (UsersRepositoryJDBCTemplateImpl) context.getAttribute("USERDAO");
-        this.commentsDao = (CommentsRepositoryImpl) context.getAttribute("COMMENTS_DAO");
-        ;
+    public CommentsServiceImpl(PostsRepositoryImpl postsDao, UsersRepositoryJDBCTemplateImpl userDao, CommentsRepositoryImpl commentsDao) {
+      this.postsDao = postsDao;
+      this.userDao = userDao;
+      this.commentsDao = commentsDao;
     }
 
     @Override
@@ -56,7 +55,6 @@ public class CommentsServiceImpl implements CommentsService {
         HashMap<Comment, User> commentUserHashMap = new HashMap<>();
         for (Comment comment : comments) {
             commentUserHashMap.put(comment, userDao.findById(comment.getAuthor_id()).get());
-
         }
         return commentUserHashMap;
     }

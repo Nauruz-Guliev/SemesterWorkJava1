@@ -38,10 +38,16 @@ public class UsersRepositoryJDBCTemplateImpl implements UsersRepository {
     //language=SQL
     private static final String SQL_GET_USER_BY_ID = "SELECT * from users where id=?";
 
+    //language=SQL
+    private static final String SQL_UPDATE_USER = "UPDATE users set firstname = ?, lastname = ?, email = ?, country = ?, gender = ?, dateofbirth = ?" +
+             "where id = ?";
+
     public UsersRepositoryJDBCTemplateImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         // this.insert = new SimpleJdbcInsert(jdbcTemplate);
     }
+
+
 
     @Override
     public Optional<List<User>> findAll() {
@@ -69,6 +75,20 @@ public class UsersRepositoryJDBCTemplateImpl implements UsersRepository {
     @Override
     public boolean deleteUser(int userId) {
         return jdbcTemplate.update(SQL_DELETE_USER, userId) > 0;
+    }
+
+    @Override
+    public boolean updateUser(User user) {
+        return jdbcTemplate.update(
+                SQL_UPDATE_USER,
+                user.getFirstName(),
+                user.getLastName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getCountry(),
+                user.getGender(),
+                user.getDateOfBirth()
+        ) > 0;
     }
 
     @Override
