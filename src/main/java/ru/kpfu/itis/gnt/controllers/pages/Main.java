@@ -37,6 +37,7 @@ public class Main extends HttpServlet{
                 );
         try {
             postList = postsService.getAllPosts();
+            System.out.println(postList);
         } catch (DBException e) {
             throw new RuntimeException(e);
         }

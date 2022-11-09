@@ -4,6 +4,7 @@
 <%@include file="/WEB-INF/views/_header.jsp" %>
 
 <div class="card m-4">
+
     <div class="card-body m-2">
         <c:if test="${not empty post}">
             <h5 class="card-title p-2">
@@ -16,11 +17,15 @@
             </p>
 
 
-            <i class="bi bi-heart-fill p-2"><c:out value="${post.likes}"/></i>
+            <button id="likeIcon" onclick="addLike(${post.id})"  type="submit" class="bi bi-hand-thumbs-up p-2">
+                <i class="img-thumbnail"></i>
+                    ${likeCount}
+            </button>
+
+
 
         </c:if>
-        <!-- Используем один цикл для двух списков, так как порядок в них соответсвует-->
-        <!-- Можно было использовать хэш мап, что было бы правильнее. Если дойдут руки, переделаю.-->
+
 
 
     </div>
@@ -46,7 +51,7 @@
     </c:if>
 
 
-    <c:forEach var="entry" items="${commentAuthors}"  >
+    <c:forEach var="entry" items="${commentAuthors}">
         <div id="commentDiv" class="commentDiv">
             <div class="card mb-3">
                 <div class="card-body">

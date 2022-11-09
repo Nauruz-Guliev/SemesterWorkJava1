@@ -14,6 +14,7 @@
                         <h5 class="card-title">${postsList[i].title}</h5>
                         <p class="card-text"> ${postsList[i].body}</p>
                     </div>
+
                     <a href="${pageContext.request.contextPath}/article?postIndex=${postsList[i].id}" class="stretched-link"></a>
                 </div>
             </div>

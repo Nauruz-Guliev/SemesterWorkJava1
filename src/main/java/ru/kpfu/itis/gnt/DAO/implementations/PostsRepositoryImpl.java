@@ -71,9 +71,7 @@ public class PostsRepositoryImpl implements PostsRepository {
                 Post post = new Post(
                         row.getString("title"),
                         row.getString("post_body"),
-                        row.getInt("likes"),
-                        row.getInt("author_id"),
-                        row.getInt("category_id")
+                        row.getInt("author_id")
                 );
                 post.setId(row.getInt("id"));
                 return post;

@@ -1,5 +1,6 @@
 package ru.kpfu.itis.gnt.DAO.implementations;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import ru.kpfu.itis.gnt.DAO.LikesRepository;
@@ -25,10 +26,10 @@ public class LikesRepositoryImpl implements LikesRepository {
     private final static String SQL_FIND_POST_COUNT = "SELECT count(post_id) from likes where post_id = ?";
 
     //language=SQL
-    private final static String SQL_FIND_COMMENT_LIKE = "SELECT user_id from likes where comment_id=? and user_id=?";
+    private final static String SQL_FIND_COMMENT_LIKE = "SELECT * from likes where comment_id=? and user_id=?";
 
     //language=SQL
-    private final static String SQL_FIND_POST_LIKE = "SELECT user_id from likes where post_id=? and user_id=?";
+    private final static String SQL_FIND_POST_LIKE = "SELECT * from likes where post_id=? and user_id=?";
 
     //language=SQL
     private final static String SQL_DELETE_COMMENT_LIKE = "DELETE from likes where comment_id=? and user_id =?";
@@ -61,7 +62,12 @@ public class LikesRepositoryImpl implements LikesRepository {
 
     @Override
     public boolean findPostLike(int user_id, int post_id) {
-        return jdbcTemplate.update(SQL_FIND_POST_LIKE, post_id, user_id) > 0;
+        try {
+            jdbcTemplate.queryForObject(SQL_FIND_POST_LIKE, new Object[]{post_id, user_id}, likeRowMapper);
+            return true;
+        } catch (EmptyResultDataAccessException ex) {
+            return false;
+        }
     }
 
     @Override
@@ -76,17 +82,17 @@ public class LikesRepositoryImpl implements LikesRepository {
 
     @Override
     public int countCommentLike(int comment_id) {
-         return jdbcTemplate.queryForObject(SQL_FIND_COMMENT_COUNT,
-                 new Object[] {comment_id},
-                 Integer.class
-                );
+        return jdbcTemplate.queryForObject(SQL_FIND_COMMENT_COUNT,
+                new Object[]{comment_id},
+                Integer.class
+        );
 
     }
 
     @Override
     public int countPostLike(int post_id) {
         return jdbcTemplate.queryForObject(SQL_FIND_POST_COUNT,
-                new Object[] {post_id},
+                new Object[]{post_id},
                 Integer.class
         );
     }

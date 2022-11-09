@@ -34,9 +34,10 @@ public class CommentServlet extends HttpServlet {
     private PostsServiceImpl postsService;
     private CommentsServiceImpl commentsService;
 
+    private UsersAuthenticationService usersService;
+
     private List<ru.kpfu.itis.gnt.entities.Comment> commentList;
 
-    private UsersAuthenticationService usersService;
     private User postAuthor;
 
     private User commentAuthor;

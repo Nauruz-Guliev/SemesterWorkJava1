@@ -2,7 +2,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@include file="/WEB-INF/views/_header.jsp" %>
-
 <script type="text/javascript">
 
 </script>
@@ -28,7 +27,6 @@
                     <c:out value="${updateErrorMessage}"/>
                 </div>
             </c:if>
-
         </div>
     </div>
 

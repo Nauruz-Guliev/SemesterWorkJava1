@@ -25,6 +25,7 @@ public class FieldsConstants {
     public static final String POLICY_AGREEMENT_FIELD_PARAMETER = "policy-agreement";
 
 
+    public static final String LIKE_COUNT_ATTRIBUTE = "likeCount";
 
 
 
