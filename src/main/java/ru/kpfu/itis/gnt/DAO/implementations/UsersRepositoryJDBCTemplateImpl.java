@@ -39,7 +39,7 @@ public class UsersRepositoryJDBCTemplateImpl implements UsersRepository {
     private static final String SQL_GET_USER_BY_ID = "SELECT * from users where id=?";
 
     //language=SQL
-    private static final String SQL_UPDATE_USER = "UPDATE users set firstname = ?, lastname = ?, email = ?, country = ?, gender = ?, dateofbirth = ?" +
+    private static final String SQL_UPDATE_USER = "UPDATE users set firstname = ?, lastname = ?, email = ?, country = ?, gender = ?, dateofbirth = TO_DATE(?,'YYYYMMDD')" +
              "where id = ?";
 
     public UsersRepositoryJDBCTemplateImpl(DataSource dataSource) {
@@ -83,11 +83,11 @@ public class UsersRepositoryJDBCTemplateImpl implements UsersRepository {
                 SQL_UPDATE_USER,
                 user.getFirstName(),
                 user.getLastName(),
-                user.getLastName(),
                 user.getEmail(),
                 user.getCountry(),
                 user.getGender(),
-                user.getDateOfBirth()
+                user.getDateOfBirth(),
+                user.getId()
         ) > 0;
     }
 

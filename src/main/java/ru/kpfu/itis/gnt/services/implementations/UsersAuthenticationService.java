@@ -40,12 +40,8 @@ public class UsersAuthenticationService {
 
     public List<String> updateUser(User user) throws DBException {
         checkUser(user);
-        if (!errorList.isEmpty()) {
-            return errorList;
-        } else {
-            if (!userDAO.updateUser(user))
-                throw new DBException("Couldn't update user");
-        }
+        if (!userDAO.updateUser(user))
+            throw new DBException("Couldn't update user");
         return errorList;
     }
 

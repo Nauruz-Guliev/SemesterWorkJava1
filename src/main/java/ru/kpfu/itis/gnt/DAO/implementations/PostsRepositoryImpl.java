@@ -21,8 +21,8 @@ public class PostsRepositoryImpl implements PostsRepository {
     private final static String SQL_UPDATE_POST = "UPDATE posts SET title=?, post_body =?, edited_at = current_timestamp where id = ?";
 
     //language=SQL
-    private final static String SQL_INSERT_POST = "INSERT INTO posts(title, post_body, category_id, author_id)" +
-            "values(?, ? , ?, ?)";
+    private final static String SQL_INSERT_POST = "INSERT INTO posts(title, post_body, author_id)" +
+            "values(?, ? , ?)";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -62,7 +62,7 @@ public class PostsRepositoryImpl implements PostsRepository {
 
     @Override
     public boolean addPost(Post post) {
-        return jdbcTemplate.update(SQL_INSERT_POST, post.getTitle(), post.getCategory_id(), post.getAuthor_id()) > 0;
+        return jdbcTemplate.update(SQL_INSERT_POST, post.getTitle(), post.getAuthor_id()) > 0;
     }
 
 

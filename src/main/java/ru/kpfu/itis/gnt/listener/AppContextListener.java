@@ -2,10 +2,8 @@ package ru.kpfu.itis.gnt.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import ru.kpfu.itis.gnt.DAO.implementations.CommentsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.implementations.DataSource;
-import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.*;
+import ru.kpfu.itis.gnt.constants.ListenerConstants;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -21,19 +19,24 @@ public class AppContextListener implements ServletContextListener {
     private PostsRepositoryImpl postDao;
 
     private CommentsRepositoryImpl commentsDao;
+    private LikesRepositoryImpl likesDao;
+
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         dataSource = new DataSource().getDataSource();
         userDAO = new UsersRepositoryJDBCTemplateImpl(dataSource);
         postDao = new PostsRepositoryImpl(dataSource);
         commentsDao = new CommentsRepositoryImpl(dataSource);
+        likesDao = new LikesRepositoryImpl(dataSource);
 
-        servletContextEvent.getServletContext().setAttribute("POSTS_DAO", postDao);
-        servletContextEvent.getServletContext().setAttribute("COMMENTS_DAO", commentsDao);
-        servletContextEvent.getServletContext().setAttribute("USERDAO", userDAO);
-        servletContextEvent.getServletContext().setAttribute("CONNECTION", dataSource);
-        servletContextEvent.getServletContext().setAttribute("OBJECT_MAPPER", new ObjectMapper());
+        servletContextEvent.getServletContext().setAttribute(ListenerConstants.KEY_LIKES_DAO, likesDao);
+        servletContextEvent.getServletContext().setAttribute(ListenerConstants.KEY_POSTS_DAO, postDao);
+        servletContextEvent.getServletContext().setAttribute(ListenerConstants.KEY_COMMENTS_DAO, commentsDao);
+        servletContextEvent.getServletContext().setAttribute(ListenerConstants.KEY_USER_DAO, userDAO);
+        servletContextEvent.getServletContext().setAttribute(ListenerConstants.KEY_DATA_SOURCE, dataSource);
+        servletContextEvent.getServletContext().setAttribute(ListenerConstants.KEY_OBJECT_MAPPER, new ObjectMapper());
     }
+
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         try {

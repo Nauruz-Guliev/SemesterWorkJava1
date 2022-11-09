@@ -62,9 +62,11 @@ public class Profile extends HttpServlet {
                     dateOfBirth,
                     country
             );
+            updatedUser.setId(userId);
             usersService.updateUser(updatedUser);
-            System.out.println(usersService.updateUser(updatedUser));
-        } catch (DBException ex) {
+            req.setAttribute(FieldsConstants.FIELD_USER, usersService.findUserById(userId));
+            getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(req, resp);
+        } catch (ServletException | IOException | DBException | NumberFormatException ex) {
             System.out.println(ex.getMessage());
         }
     }

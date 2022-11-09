@@ -15,6 +15,8 @@ public class FieldsConstants {
     public static final String FIRST_NAME_PARAMETER = "firstName";
     public static final String LAST_NAME_FIELD_PARAMETER = "lastName";
     public static final String EMAIL_FIELD_PARAMETER = "email";
+
+    public static final String PASSWORD_OLD_PARAMETER = "old_password";
     public static final String PASSWORD_FIELD_PARAMETER = "password";
     public static final String PASSWORD_CONFIRM_FIELD_PARAMETER = "password-confirm";
     public static final String COUNTRY_FIELD_PARAMETER = "country";

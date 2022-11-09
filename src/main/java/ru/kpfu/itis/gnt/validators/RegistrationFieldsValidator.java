@@ -44,8 +44,11 @@ public class RegistrationFieldsValidator {
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.country = country;
+        errorList = new ArrayList<>();
+
         validateUpdateInputs();
     }
+
 
     private void validateUpdateInputs(){
         checkFirstName();

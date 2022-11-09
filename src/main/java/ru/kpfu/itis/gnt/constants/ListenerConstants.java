@@ -7,4 +7,7 @@ public class ListenerConstants {
     public static final String KEY_DATA_SOURCE = "CONNECTION";
     public static final String KEY_OBJECT_MAPPER = "OBJECT_MAPPER";
 
+    public static final String KEY_LIKES_DAO = "LIKES_DAO";
+
+
 }

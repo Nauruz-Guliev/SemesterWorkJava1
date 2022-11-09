@@ -17,25 +17,25 @@
             <div class="card mb-4">
                 <div class="card-header">Account Details</div>
                 <div class="card-body">
-                    <form>
+                    <form method="POST">
 
                         <!-- Form Row-->
                         <div class="row gx-3 mb-3">
                             <!-- Form Group (first name)-->
                             <div class="col-md-6">
                                 <label class="small mb-1" for="firstName">First name</label>
-                                <input class="form-control" id="firstName" type="text" placeholder="Enter your first name" value="${USER.firstName}">
+                                <input class="form-control" name="firstName" id="firstName" type="text" placeholder="Enter your first name" value="${USER.firstName}">
                             </div>
                             <!-- Form Group (last name)-->
                             <div class="col-md-6">
                                 <label class="small mb-1" for="lastName">Last name</label>
-                                <input class="form-control" id="lastName" type="text" placeholder="Enter your last name" value="${USER.lastName}">
+                                <input class="form-control" name="lastName"id="lastName" type="text" placeholder="Enter your last name" value="${USER.lastName}">
                             </div>
                         </div>
                         <!-- Form Group (email address)-->
                         <div class="mb-3">
                             <label class="small mb-1" for="email">Email</label>
-                            <input class="form-control" id="email" type="email" placeholder="Enter your email address" value="${USER.email}">
+                            <input class="form-control" name="email" id="email" type="email" placeholder="Enter your email address" value="${USER.email}">
                         </div>
                         <!-- Form Row-->
                         <div class="row gx-4 mb-3">
@@ -46,17 +46,16 @@
                             <!-- Form Group (birthday)-->
                             <div class="col-md-4">
                                 <label class="small mb-1" for="date-of-birth">Date of birth</label>
-                                <input class="form-control" id="date-of-birth" type="text" name="birthday" placeholder="Enter your birthday" value="${USER.dateOfBirth}">
+                                <input class="form-control" name="date-of-birth" id="date-of-birth" type="text" name="birthday" placeholder="Enter your birthday" value="${USER.dateOfBirth}">
                             </div>
 
                             <div class="col-md-4">
                                 <label class="small mb-1" for="gender">Gender</label>
-                                <input class="form-control" id="gender" type="text" name="gender" placeholder="Choose your gender" value="${USER.gender}">
+                                <input class="form-control" name="gender" id="gender" type="text" name="gender" placeholder="Choose your gender" value="${USER.gender}">
                             </div>
                         </div>
                         <!-- Save changes button-->
-                        <input  class="btn btn-primary" href="" type="submit" value="Save changes" placeholder="Save changes" >
-                        <input  class="btn btn-danger" href="" type="submit" value="Delete account" placeholder="Delete account">
+                        <input  type="submit" class="btn btn-primary"  href=""  value="Save changes" placeholder="Save changes" >
                     </form>
                 </div>
             </div>

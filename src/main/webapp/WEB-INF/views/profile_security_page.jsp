@@ -1,7 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="/WEB-INF/views/_header.jsp" %>
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib tagdir="/WEB-INF/tags" prefix="t" %>
 
 <div class="container-xl px-4 mt-4">
   <!-- Account page navigation-->
@@ -14,23 +13,23 @@
       <div class="card mb-4">
         <div class="card-header">Change Password</div>
         <div class="card-body">
-          <form>
+          <form method="post">
             <!-- Form Group (current password)-->
             <div class="mb-3">
               <label class="small mb-1" for="currentPassword">Current Password</label>
-              <input class="form-control" id="currentPassword" type="password" placeholder="Enter current password">
+              <input class="form-control" name="old_password" id="currentPassword" type="password" placeholder="Enter current password">
             </div>
             <!-- Form Group (new password)-->
             <div class="mb-3">
               <label class="small mb-1" for="newPassword">New Password</label>
-              <input class="form-control" id="newPassword" type="password" placeholder="Enter new password">
+              <input class="form-control" name="password" id="newPassword" type="password" placeholder="Enter new password">
             </div>
             <!-- Form Group (confirm password)-->
             <div class="mb-3">
               <label class="small mb-1" for="confirmPassword">Confirm Password</label>
-              <input class="form-control" id="confirmPassword" type="password" placeholder="Confirm new password">
+              <input class="form-control" name="password-confirm" id="confirmPassword" type="password" placeholder="Confirm new password">
             </div>
-            <button class="btn btn-primary" type="button">Save</button>
+            <input type="submit" class="btn btn-primary">
           </form>
         </div>
       </div>

@@ -9,6 +9,8 @@ import java.io.IOException;
 
 @WebServlet("/profile/update")
 public class UpdateUserServlet extends HttpServlet {
+
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 

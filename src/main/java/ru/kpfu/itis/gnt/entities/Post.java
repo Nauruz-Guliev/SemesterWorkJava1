@@ -8,7 +8,6 @@ public class Post {
     private String body;
     private int likes;
     private int author_id;
-    private int category_id;
 
     public Post(String title, String body, int likes, int author_id, int category_id) {
         this.id = -1;
@@ -16,7 +15,6 @@ public class Post {
         this.body = body;
         this.likes = likes;
         this.author_id = author_id;
-        this.category_id = category_id;
     }
 
     public int getId() {
@@ -59,25 +57,19 @@ public class Post {
         this.author_id = author_id;
     }
 
-    public int getCategory_id() {
-        return category_id;
-    }
 
-    public void setCategory_id(int category_id) {
-        this.category_id = category_id;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Post)) return false;
         Post post = (Post) o;
-        return getId() == post.getId() && getLikes() == post.getLikes() && getAuthor_id() == post.getAuthor_id() && getCategory_id() == post.getCategory_id() && Objects.equals(getTitle(), post.getTitle()) && Objects.equals(getBody(), post.getBody());
+        return getId() == post.getId() && getLikes() == post.getLikes() && getAuthor_id() == post.getAuthor_id() && Objects.equals(getTitle(), post.getTitle()) && Objects.equals(getBody(), post.getBody());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), getBody(), getLikes(), getAuthor_id(), getCategory_id());
+        return Objects.hash(getId(), getTitle(), getBody(), getLikes(), getAuthor_id() );
     }
 
     @Override
@@ -88,7 +80,6 @@ public class Post {
                 ", body='" + body + '\'' +
                 ", likes=" + likes +
                 ", author_id=" + author_id +
-                ", category_id=" + category_id +
                 '}';
     }
 }

@@ -31,7 +31,7 @@
 
 
                 <c:if test="${not empty user}">
-                    <li class="nav-item"><a class="nav-link" href="<c:url value="/profile"/>" class="button">Profile</a>
+                    <li class="nav-item"><a class="nav-link" href="<c:url value="/profile/general"/>" class="button">Profile</a>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="<c:url value="/signout"/>" class="button">Sign
                         Out</a></li>

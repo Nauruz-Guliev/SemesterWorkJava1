@@ -18,7 +18,7 @@
 
                     <h3 class="mb-5">Sign in</h3>
 
-                    <form action="<c:url value="signin"/>" method="POST">
+                    <form action="<c:url value="/signin"/>" method="POST">
                         <div class="form-floating mb-3">
                             <input name="email" type="text" class="form-control" autofocus id="email"
                                    placeholder="Email"

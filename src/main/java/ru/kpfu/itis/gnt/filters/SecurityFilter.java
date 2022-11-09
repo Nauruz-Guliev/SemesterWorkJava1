@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebFilter("/*")
 public class SecurityFilter extends HttpFilter {
-    protected final String[] protectedPaths = {"/profile", "/comment"};
+    protected final String[] protectedPaths = {"/profile/general", "/comment", "profile/security", "profile/update"};
 
     private final static String USER = "user";
 
