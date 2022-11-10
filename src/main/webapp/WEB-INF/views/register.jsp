@@ -52,13 +52,7 @@
 
                        <t:select_countries></t:select_countries>
 
-
-                        <select class="form-select mb-3" name="gender">
-                            <option value="">-Select Gender-</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
+                        <t:select_gender></t:select_gender>
 
 
                         <input class="form-control" type="date" name="date-of-birth" placeholder="Date of birth">

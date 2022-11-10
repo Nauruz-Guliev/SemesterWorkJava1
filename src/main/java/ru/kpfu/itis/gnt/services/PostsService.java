@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PostsService {
 
-    List<Post> getAllPosts() throws DBException;
+    List<Post> getPosts(int limit, int offset) throws DBException;
 
     Post getPostById(int postId) throws DBException;
     boolean addPost(Post post);

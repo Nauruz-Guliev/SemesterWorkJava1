@@ -18,7 +18,7 @@ public class CommentsRepositoryImpl implements CommentsRepository {
     private final JdbcTemplate jdbcTemplate;
 
     //language=SQL
-    private static final String SQL_GET_ALL_COMMENTS = "SELECT * FROM comments where post_id =? order by created_at asc ";
+    private static final String SQL_GET_ALL_COMMENTS = "SELECT * FROM comments where post_id =? order by created_at asc LIMIT ? offset ?";
 
     //language=SQL
     private static final String SQL_ADD_COMMENT = "INSERT INTO comments(text, post_id, author_id)" +
@@ -28,7 +28,8 @@ public class CommentsRepositoryImpl implements CommentsRepository {
     //language=SQL
     private static final String SQL_DELETE_COMMENT = "DELETE FROM comments where id =?";
 
-
+    //language=SQL
+    private static final String SQL_COMMENT_COUNT = "SELECT COUNT(*) from comments where post_id = ?";
 
 
     public CommentsRepositoryImpl(DataSource dataSource) {
@@ -36,17 +37,20 @@ public class CommentsRepositoryImpl implements CommentsRepository {
     }
 
     @Override
-    public Optional<List<Comment>> findAllComments(int postId) {
-        try {
-            List<Comment> comments = jdbcTemplate.query(SQL_GET_ALL_COMMENTS, new Object[]{postId}, commentRowMapper);
-            if (!comments.isEmpty()) {
-                return Optional.of(comments);
-            }
-        } catch (EmptyResultDataAccessException ex) {
-            return Optional.empty();
-        }
-        return Optional.empty();
+    public Optional<List<Comment>> findComments(int postId, int limit, int offset) {
+        return Optional.of(jdbcTemplate.query(SQL_GET_ALL_COMMENTS,
+                new Object[]{postId, limit, offset},
+                commentRowMapper)
+        );
     }
+
+    public Optional<Integer> getCommentCount(int post_id) {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_COMMENT_COUNT,
+                new Object[]{post_id},
+                Integer.class
+        ));
+    }
+
 
     @Override
     public boolean addComment(Comment comment) {

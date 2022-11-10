@@ -1,9 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="/WEB-INF/views/_header.jsp" %>
 
-<div class="card m-4">
+<div id="article-div" class="card m-4">
 
     <div class="card-body m-2">
         <c:if test="${not empty post}">
@@ -17,15 +18,15 @@
             </p>
 
 
-            <button id="likeIcon" onclick="addLike(${post.id})"  type="submit" class="bi bi-hand-thumbs-up p-2">
-                <i class="img-thumbnail"></i>
-                    ${likeCount}
-            </button>
-
+            <c:if test="${not empty email}">
+                <button id="likeIcon" onclick="addLike(${post.id})" type="submit">
+                    <i class="bi bi-hand-thumbs-up p-2"></i>
+                        ${likeCount}
+                </button>
+            </c:if>
 
 
         </c:if>
-
 
 
     </div>
@@ -71,8 +72,22 @@
                     </div>
                 </div>
             </div>
-            <div></div>
         </div>
     </c:forEach>
 
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <c:forEach begin="0" end="${commentCount+1}" var="i" step="10">
+
+                <li class="page-item"><a class="page-link"
+                                         href="${pageContext.request.contextPath}/article?postIndex=${post.id}&offset=${i}">
+                    <fmt:formatNumber value="${(i/10)+1}" minFractionDigits="0" maxFractionDigits="0"/>
+
+                </a></li>
+
+            </c:forEach>
+
+        </ul>
+    </nav>
 </div>

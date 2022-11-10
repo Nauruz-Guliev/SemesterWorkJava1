@@ -20,10 +20,52 @@ function addComment(postId, comment) {
 }
 
 function setLikeCount(like) {
-    document.getElementById('likeIcon').innerText = like;
+    let btnIcon = document.getElementById('likeIcon');
+    if (like > parseInt(btnIcon.innerText)) {
+        btnIcon.innerHTML = '<i class="bi bi-hand-thumbs-up-fill p-2"></i>' + like;
+    } else {
+        btnIcon.innerHTML = '<i class="bi bi-hand-thumbs-up p-2"></i>' + like;
+    }
 }
 
+
+let checkCookie = function () {
+    const currentCookie = document.cookie;
+    let cookie = divideCookie(currentCookie);
+    // если ключ куки содержит слово message, то показываю диалог
+    if (cookie[0].includes("Message")) {
+        showPopup(cookie[1].replaceAll("-", " "), cookie[0].replaceAll('Message', ' message'));
+        // удаляю сообщение после того, как оно было показано
+        document.cookie = cookie[0] + '=; Max-Age=0'
+    }
+};
+
+function divideCookie(cookie) {
+    return cookie.split('=');
+}
+// с интервалом проверяю есть ли cookie
+window.setInterval(checkCookie, 100);
+
+
+const showPopup = (message, title) => {
+    let myModal = new bootstrap.Modal(document.getElementById("modal"), {});
+    document.getElementById('message-body').innerText = message;
+    document.getElementById('modal-title').innerHTML = title;
+    myModal.show();
+}
+
+
 function addCommentCard(comment) {
+    debugger;
+    let clone = document.getElementById('commentDiv').children[0].cloneNode(true);
+
+    clone.children[0].children[0].children[0].children[0].children[0].innerText = comment.authorName;
+    clone.children[0].children[0].children[0].children[0].children[1].innerText = comment.created_at;
+    clone.children[0].children[0].children[0].children[1].innerText = comment.text;
+
+    document.getElementById('commentDiv').prepend(clone);
+
+    /*
     let newCommentCard =
         '<div class="card mb-3">' +
         '<div class="card-body">' +
@@ -44,4 +86,6 @@ function addCommentCard(comment) {
         '</div>' +
         '</div>';
     document.getElementById('commentDiv').innerHTML = newCommentCard + document.getElementById('commentDiv').innerHTML;
+
+     */
 }

@@ -3,6 +3,7 @@ package ru.kpfu.itis.gnt.services.implementations;
 import ru.kpfu.itis.gnt.DAO.implementations.CommentsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.Utils.CommentDateComparator;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.Comment;
 import ru.kpfu.itis.gnt.entities.Post;
@@ -11,8 +12,11 @@ import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.CommentsService;
 
 import javax.servlet.ServletContext;
-import java.util.HashMap;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CommentsServiceImpl implements CommentsService {
 
@@ -29,9 +33,15 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
-    public List<Comment> getAllComments(Post post) throws DBException {
-        return commentsDao.findAllComments(post.getId()).orElseThrow(
+    public List<Comment> getComments(Post post, int limit, int offset) throws DBException {
+        return commentsDao.findComments(post.getId(), limit, offset).orElseThrow(
                 () -> new DBException("There is no comments.")
+        );
+    }
+
+    public int getCommentsCount(int post_id) throws DBException {
+        return commentsDao.getCommentCount(post_id).orElseThrow(
+                () -> new DBException("There is no comments!")
         );
     }
 
@@ -51,11 +61,25 @@ public class CommentsServiceImpl implements CommentsService {
      У каждого комментария обязательно найдётся автор, так как в бд комментарий не может
      храниться без привязки к автору.
      */
-    public HashMap<Comment, User> getCommentAuthors(List<Comment> comments) {
+    public HashMap<Comment, User> getCommentAuthors(List<Comment> comments) throws ParseException {
         HashMap<Comment, User> commentUserHashMap = new HashMap<>();
         for (Comment comment : comments) {
             commentUserHashMap.put(comment, userDao.findById(comment.getAuthor_id()).get());
         }
-        return commentUserHashMap;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
+        Comparator<Comment> byDate = Comparator.comparing((Comment c) -> {
+            try {
+                return formatter.parse(c.getCreated_at().substring(0, 19));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
+
+        return commentUserHashMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey(byDate))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (el1, el2) -> el1, HashMap::new));
     }
 }

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface CommentsRepository {
 
-    Optional<List<Comment>> findAllComments(int postId);
+    Optional<List<Comment>> findComments(int postId, int limit, int offset);
 
     boolean addComment(Comment comment);
 

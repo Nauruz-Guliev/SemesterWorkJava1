@@ -9,7 +9,7 @@
         <div class="row">
 
             <div class="col-8">
-                <div class="card-body" style="transform: rotate(0);">
+                <div class="card-body">
                     <div class="card bg-light mb-3 p-4 m-2" >
                         <h5 class="card-title">${postsList[i].title}</h5>
                         <p class="card-text"> ${postsList[i].body}</p>

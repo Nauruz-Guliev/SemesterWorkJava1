@@ -46,12 +46,12 @@
                             <!-- Form Group (birthday)-->
                             <div class="col-md-4">
                                 <label class="small mb-1" for="date-of-birth">Date of birth</label>
-                                <input class="form-control" name="date-of-birth" id="date-of-birth" type="text" name="birthday" placeholder="Enter your birthday" value="${USER.dateOfBirth}">
+                                <input class="form-control" name="date-of-birth" id="date-of-birth" type="date" name="birthday" placeholder="Enter your birthday" value="${USER.dateOfBirth}">
                             </div>
 
                             <div class="col-md-4">
-                                <label class="small mb-1" for="gender">Gender</label>
-                                <input class="form-control" name="gender" id="gender" type="text" name="gender" placeholder="Choose your gender" value="${USER.gender}">
+                                <label class="small mb-1" for="date-of-birth">Gender</label>
+                                <t:select_gender></t:select_gender>
                             </div>
                         </div>
                         <!-- Save changes button-->

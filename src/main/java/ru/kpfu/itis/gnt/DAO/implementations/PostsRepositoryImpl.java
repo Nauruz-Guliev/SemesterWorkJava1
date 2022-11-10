@@ -14,7 +14,7 @@ import java.util.Optional;
 public class PostsRepositoryImpl implements PostsRepository {
 
     //language=SQL
-    private final static String SQL_GET_ALL_POSTS = "SELECT * from posts";
+    private final static String SQL_GET_ALL_POSTS = "SELECT * from posts order by posts.created_at desc limit ? offset ?";
     //language=SQL
     private final static String SQL_GET_POST_BY_ID = "SELECT * from posts where id = ?";
     //language=SQL
@@ -36,28 +36,14 @@ public class PostsRepositoryImpl implements PostsRepository {
     }
 
     @Override
-    public Optional<List<Post>> findAllPosts() {
-        List<Post> postList = jdbcTemplate.query(SQL_GET_ALL_POSTS, postMapper);
-        if (!postList.isEmpty()) {
-            return Optional.of(postList);
-        }
-        return Optional.empty();
+    public Optional<List<Post>> findPosts(int limit, int offset) {
+        return Optional.of(jdbcTemplate.query(SQL_GET_ALL_POSTS, postMapper, limit, offset));
     }
 
     @Override
     public Optional<Post> findPostById(int postId) {
-        try {
-            Post post = jdbcTemplate.queryForObject(SQL_GET_POST_BY_ID, new Object[]{postId}, postMapper);
-            if (post != null) {
-                return Optional.of(post);
-            }
-        } catch (EmptyResultDataAccessException ex) {
-            return Optional.empty();
-        }
-        return Optional.empty();
+        return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_GET_POST_BY_ID, new Object[]{postId}, postMapper));
     }
-
-
 
 
     @Override

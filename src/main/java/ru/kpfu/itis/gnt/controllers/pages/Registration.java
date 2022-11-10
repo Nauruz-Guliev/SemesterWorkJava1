@@ -3,6 +3,7 @@ package ru.kpfu.itis.gnt.controllers.pages;
 
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.Utils.Encrypter;
+import ru.kpfu.itis.gnt.constants.CookieConstants;
 import ru.kpfu.itis.gnt.constants.FieldsConstants;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.User;
@@ -15,6 +16,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,7 +70,12 @@ public class Registration extends HttpServlet {
             }
             request.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(request, response);
         } catch (DBException ex) {
-            System.out.println(ex);
+            response.addCookie(
+                    new Cookie(
+                            CookieConstants.ERROR_MESSAGE,
+                            ex.getMessage()
+                    )
+            );
         }
     }
 

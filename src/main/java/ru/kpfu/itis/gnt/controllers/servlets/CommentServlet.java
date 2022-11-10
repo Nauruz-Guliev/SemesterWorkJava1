@@ -84,7 +84,8 @@ public class CommentServlet extends HttpServlet {
             // то тогда создаём новый объект комментария и передаем на фронт
             // с помощью json
             if (commentsService.addComment(commentServletToDb)) {
-                commentList = commentsService.getAllComments(post);
+                int commentsCount = commentsService.getCommentsCount(postId);
+                commentList = commentsService.getComments(post, 1, commentsCount-1);
                 // отображаем только последний
                 Comment comment = commentList.get(commentList.size() - 1);
                 commentAuthor = usersService.findUserById(comment.getAuthor_id());

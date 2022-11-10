@@ -43,7 +43,7 @@
         <div class="card-header">Delete Account</div>
         <div class="card-body">
           <p>Deleting your account is a permanent action and cannot be undone. If you are sure you want to delete your account, select the button below.</p>
-          <button class="btn btn-danger-soft text-danger" type="button">I understand, delete my account</button>
+          <button onclick="showPopup()" class="btn btn-danger-soft text-danger" type="button">I understand, delete my account</button>
         </div>
       </div>
     </div>

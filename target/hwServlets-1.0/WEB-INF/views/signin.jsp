@@ -2,13 +2,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@include file="/WEB-INF/views/_header.jsp" %>
 
-<script type="text/javascript">
-    const showPopup = () => {
-        let myModal = new bootstrap.Modal(document.getElementById("modal"), {});
-        myModal.show();
-    }
-</script>
-
 
 <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -43,14 +36,6 @@
                             </div>
                         </c:if>
                     </form>
-
-                    <div class="modal" tabindex="-1" id="modal">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
             </div>

@@ -1,6 +1,8 @@
 package ru.kpfu.itis.gnt.controllers.pages;
 
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.Utils.CookieMessageAdder;
+import ru.kpfu.itis.gnt.constants.CookieConstants;
 import ru.kpfu.itis.gnt.constants.FieldsConstants;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.User;
@@ -9,6 +11,7 @@ import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,8 +48,9 @@ public class Profile extends HttpServlet {
             initValues(req, resp);
             req.setAttribute(FieldsConstants.FIELD_USER, user);
             getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(req, resp);
+
         } catch (ServletException | DBException | IOException ex) {
-            System.out.println(ex);
+            CookieMessageAdder.addMessage(resp, CookieConstants.ERROR_MESSAGE, ex.getMessage());
         }
     }
 
@@ -65,9 +69,12 @@ public class Profile extends HttpServlet {
             updatedUser.setId(userId);
             usersService.updateUser(updatedUser);
             req.setAttribute(FieldsConstants.FIELD_USER, usersService.findUserById(userId));
-            getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(req, resp);
-        } catch (ServletException | IOException | DBException | NumberFormatException ex) {
-            System.out.println(ex.getMessage());
+            CookieMessageAdder.addMessage(resp, CookieConstants.SUCCESS_MESSAGE, "User has been updated successfully!");
+            doGet(req, resp);
+
+        } catch (DBException | NumberFormatException ex) {
+            CookieMessageAdder.addMessage(resp, CookieConstants.ERROR_MESSAGE, ex.getMessage());
+
         }
     }
 

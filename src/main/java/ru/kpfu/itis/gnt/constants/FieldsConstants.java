@@ -28,5 +28,8 @@ public class FieldsConstants {
     public static final String LIKE_COUNT_ATTRIBUTE = "likeCount";
 
 
+    public static final String COOKIE_MESSAGE_CONSTANT = "message-cookie";
+
+
 
 }

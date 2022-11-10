@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface CommentsService {
 
-    List<Comment> getAllComments(Post post) throws DBException;
+    List<Comment> getComments(Post post, int limit, int offset) throws DBException;
 
     boolean addComment(Comment comment);
 
