@@ -6,12 +6,10 @@ import ru.kpfu.itis.gnt.constants.FieldsConstants;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.Comment;
 import ru.kpfu.itis.gnt.entities.Post;
+import ru.kpfu.itis.gnt.entities.Tag;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
-import ru.kpfu.itis.gnt.services.implementations.CommentsServiceImpl;
-import ru.kpfu.itis.gnt.services.implementations.LikesServiceImpl;
-import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
-import ru.kpfu.itis.gnt.services.implementations.UsersService;
+import ru.kpfu.itis.gnt.services.implementations.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,6 +26,7 @@ import java.util.List;
 public class PostPage extends HttpServlet {
     private Post post;
     private int postId;
+    private boolean isLiked;
 
     private List<Comment> commentList;
     private User postAuthor;
@@ -40,6 +39,10 @@ public class PostPage extends HttpServlet {
 
     private LikesServiceImpl likesService;
     private UsersService usersService;
+
+    private TagsServiceImpl tagsService;
+
+    private List<Tag> postTags;
 
     private int userId;
 
@@ -55,8 +58,9 @@ public class PostPage extends HttpServlet {
         CommentsRepositoryImpl commentsDao = (CommentsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_COMMENTS_DAO);
         LikesRepositoryImpl likesDao = (LikesRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_LIKES_DAO);
         TagsRepositoryImpl tagsDao = (TagsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_TAGS_DAO);
-        TagNamesRepositoryImpl tagNamesDao= (TagNamesRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_TAG_NAME_DAO);
+        TagNamesRepositoryImpl tagNamesDao = (TagNamesRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_TAG_NAME_DAO);
 
+        tagsService = new TagsServiceImpl(tagsDao, tagNamesDao);
         usersService = new UsersService(usersDao);
         postsService = new PostsServiceImpl(postsDao, usersDao, tagsDao, tagNamesDao);
         commentsService = new CommentsServiceImpl(postsDao, usersDao, commentsDao);
@@ -77,16 +81,11 @@ public class PostPage extends HttpServlet {
             if (usersService.isSigned(req)) {
                 userId = (int) req.getSession().getAttribute(FieldsConstants.USER_ID_ATTRIBUTE);
             }
+            isLiked = likesService.isPostLikedByUser(postId, userId);
             likeCount = likesService.countPostLikes(postId);
             initValues();
-
-            req.setAttribute("post", post);
-            req.setAttribute("postAuthor", postAuthor);
-            req.setAttribute("commentList", commentList);
-            req.setAttribute("commentAuthors", commentAuthors);
-            req.setAttribute("userId", userId);
-            req.setAttribute("likeCount", likeCount);
-            req.setAttribute("commentCount", commentCount);
+            System.out.println(postTags);
+            setAttributes(req);
             getServletContext().getRequestDispatcher("/WEB-INF/views/post.jsp").forward(req, resp);
         } catch (ParseException | ServletException | IOException | NumberFormatException | DBException ex) {
             RedirectHelper.redirect(req, resp, "/post", ex.getMessage());
@@ -99,6 +98,18 @@ public class PostPage extends HttpServlet {
         commentList = commentsService.getComments(post, 10, commentOffset);
         commentCount = commentsService.getCommentsCount(postId);
         commentAuthors = commentsService.getCommentAuthors(commentList);
+        postTags = tagsService.findAllTags(postId);
+    }
+
+    private void setAttributes(HttpServletRequest req) {
+        req.setAttribute("isLiked", isLiked);
+        req.setAttribute("post", post);
+        req.setAttribute("postAuthor", postAuthor);
+        req.setAttribute("commentList", commentList);
+        req.setAttribute("commentAuthors", commentAuthors);
+        req.setAttribute("userId", userId);
+        req.setAttribute("likeCount", likeCount);
+        req.setAttribute("commentCount", commentCount);
     }
 
 }

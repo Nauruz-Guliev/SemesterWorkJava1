@@ -20,8 +20,15 @@
 
             <c:if test="${not empty email}">
                 <button id="likeIcon" onclick="addLike(${post.id})" type="submit">
-                    <i class="bi bi-hand-thumbs-up p-2"></i>
+                    <c:if test="${!isLiked || empty isLiked}">
+                        <i class="bi bi-hand-thumbs-up p-2"></i>
+                    </c:if>
+                    <c:if test="${isLiked}">
+                        <i class="bi bi-hand-thumbs-up-fill p-2"></i>
+                    </c:if>
+
                         ${likeCount}
+
                 </button>
             </c:if>
 

@@ -4,10 +4,12 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import ru.kpfu.itis.gnt.DAO.TagsRepository;
+import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.entities.Tag;
 import ru.kpfu.itis.gnt.entities.TagName;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Optional;
 
 public class TagsRepositoryImpl implements TagsRepository {
@@ -37,14 +39,8 @@ public class TagsRepositoryImpl implements TagsRepository {
     }
 
     @Override
-    public Optional<Tag> findAllTags(int postId) {
-        return Optional.ofNullable(
-                jdbcTemplate.queryForObject(
-                        SQL_FIND_ALL_TAGS,
-                        new Object[]{postId},
-                        tagRowMapper
-                )
-        );
+    public Optional<List<Tag>> findAllTags(int postId) {
+        return Optional.of(jdbcTemplate.query(SQL_FIND_ALL_TAGS, new Object[]{postId}, tagRowMapper));
     }
 
     @Override

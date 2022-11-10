@@ -9,7 +9,7 @@
 <div class="container-xl px-4 mt-4">
 
 
-    <t:profile_page_header></t:profile_page_header>
+    <t:profile_page_header isAdmin="${not empty admin}"></t:profile_page_header>
     <hr class="mt-0 mb-4">
     <div class="row">
         <div class="col-xl-8">

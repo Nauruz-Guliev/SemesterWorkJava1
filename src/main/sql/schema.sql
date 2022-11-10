@@ -63,3 +63,9 @@ CREATE TABLE likes
     UNIQUE (user_id, comment_id, post_id)
 );
 
+
+with likes_count as(
+    SELECT post_id, count(*) as like_count
+        from likes group by post_id
+) select p.* from posts p
+join likes_count l on p.id = l.post_id order by l.like_count desc limit 5;

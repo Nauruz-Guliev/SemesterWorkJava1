@@ -42,10 +42,8 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
-    public void addComment(Comment comment) throws DBException {
-        if(!commentsDao.addComment(comment)){
-            throw new DBException("Couldn't add the comment");
-        }
+    public boolean addComment(Comment comment) throws DBException {
+        return commentsDao.addComment(comment);
     }
 
 

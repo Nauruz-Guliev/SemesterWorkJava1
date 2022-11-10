@@ -1,6 +1,7 @@
 package ru.kpfu.itis.gnt.services.implementations;
 
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import ru.kpfu.itis.gnt.DAO.TagNamesRepository;
 import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.TagsRepositoryImpl;
@@ -32,6 +33,12 @@ public class PostsServiceImpl implements PostsService {
         this.tagNamesDao = tagNamesDao;
     }
 
+    public List<Post> getMostPopularPosts() throws DBException {
+        return postsDao.findMostPopular().orElseThrow(
+                () -> new DBException("No posts found")
+        );
+    }
+
     @Override
     public List<Post> getPosts(int limit, int offset) throws DBException {
         return postsDao.findPosts(limit, offset)
@@ -45,7 +52,7 @@ public class PostsServiceImpl implements PostsService {
     }
 
     @Override
-    public boolean addPost(Post post, ArrayList<String> tagNames) throws DBException, DuplicateKeyException {
+    public boolean addPost(Post post, ArrayList<String> tagNames) throws DBException, DuplicateKeyException, EmptyResultDataAccessException {
         if (PostValidator.areFieldsValid(post)) {
             postsDao.addPost(post);
         } else {

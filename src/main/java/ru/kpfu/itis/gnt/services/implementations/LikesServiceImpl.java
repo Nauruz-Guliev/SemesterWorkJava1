@@ -32,7 +32,7 @@ public class LikesServiceImpl implements LikesService {
 
     @Override
     public boolean likePost(int post_id, int user_id) {
-        if (!likesDao.isPostLikePresent(user_id, post_id)) {
+        if (!isPostLikedByUser(post_id, user_id)) {
             return likesDao.likePost(user_id, post_id);
         } else {
             likesDao.deletePostLike(user_id, post_id);
@@ -41,7 +41,7 @@ public class LikesServiceImpl implements LikesService {
     }
 
     public boolean isPostLikedByUser(int post_id, int user_id) {
-        return likesDao.likePost(user_id, post_id);
+        return likesDao.isPostLikePresent(user_id, post_id);
     }
 
     @Override

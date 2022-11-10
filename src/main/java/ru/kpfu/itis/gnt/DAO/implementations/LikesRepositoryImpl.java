@@ -37,6 +37,7 @@ public class LikesRepositoryImpl implements LikesRepository {
     //language=SQL
     private final static String SQL_DELETE_POST_LIKE = "DELETE from likes where post_id=? and user_id=?";
 
+
     private JdbcTemplate jdbcTemplate;
 
     public LikesRepositoryImpl(DataSource dataSource) {

@@ -1,8 +1,8 @@
 package ru.kpfu.itis.gnt.services.implementations;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.Utils.Encrypter;
-import ru.kpfu.itis.gnt.dto.UserSignUp;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.exceptions.RegistrationException;
@@ -50,21 +50,18 @@ public class UsersService implements ru.kpfu.itis.gnt.services.UsersService {
         }
     }
 
-    public void removeUser(int userId) throws DBException{
+    public void removeUser(int userId) throws DBException {
         if (!userDAO.deleteUser(userId)) {
             throw new DBException("Couldn't remove the user!");
         }
     }
 
     public void updateCountry(String country, int userId) throws DBException {
-        if (!userDAO.updateCountry(country, userId))
-            throw new DBException("Couldn't update user's country");
+        if (!userDAO.updateCountry(country, userId)) throw new DBException("Couldn't update user's country");
     }
 
     public List<User> findAll() throws DBException {
-        return userDAO.findAll().orElseThrow(
-                () -> new DBException("Couldn't load all the users")
-        );
+        return userDAO.findAll().orElseThrow(() -> new DBException("Couldn't load all the users"));
     }
 
     @Override
@@ -88,14 +85,7 @@ public class UsersService implements ru.kpfu.itis.gnt.services.UsersService {
 
     private void checkUser(User user, Boolean isUpdating, String passwordConfirm, String policyAgreement) {
         if (isUpdating) {
-            userValidator = new RegistrationFieldsValidator(
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getEmail(),
-                    user.getGender(),
-                    user.getDateOfBirth(),
-                    user.getCountry()
-            );
+            userValidator = new RegistrationFieldsValidator(user.getFirstName(), user.getLastName(), user.getEmail(), user.getGender(), user.getDateOfBirth(), user.getCountry());
         } else {
             userValidator = new RegistrationFieldsValidator(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), passwordConfirm, user.getGender(), user.getDateOfBirth(), user.getCountry(), policyAgreement);
         }
@@ -111,17 +101,17 @@ public class UsersService implements ru.kpfu.itis.gnt.services.UsersService {
     }
 
     @Override
-    public boolean signIn(HttpServletRequest req, String email, String password) throws DBException {
-        if (userDAO.findUser(email, password).isPresent()) {
+    public void signIn(HttpServletRequest req, String email, String password) throws DBException {
+        try {
             User user = userDAO.findUser(email, password).get();
             req.getSession().setAttribute(EMAIL, user.getEmail());
             req.getSession().setAttribute(USER_ID, user.getId());
             if (user.getRole().equals(ADMIN)) {
                 req.getSession().setAttribute(ADMIN, user.getEmail());
             }
-            return true;
+        } catch (EmptyResultDataAccessException ex) {
+            throw new DBException("Wrong password or login.");
         }
-        return false;
     }
 
     @Override
@@ -132,9 +122,7 @@ public class UsersService implements ru.kpfu.itis.gnt.services.UsersService {
     }
 
     public User findUserById(int userId) throws DBException {
-        return userDAO.findById(userId).orElseThrow(
-                () -> new DBException("User was not found")
-        );
+        return userDAO.findById(userId).orElseThrow(() -> new DBException("User was not found"));
     }
 
 }

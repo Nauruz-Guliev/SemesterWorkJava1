@@ -27,8 +27,12 @@ public class PostsRepositoryImpl implements PostsRepository {
     private final static String SQL_INSERT_POST = "INSERT INTO posts(title, post_body, author_id)" +
             "values(?, ? , ?)";
 
-    private final JdbcTemplate jdbcTemplate;
+    //language=SQL
+    private final static String SQL_GET_MOST_POPULAR_POSTS = "with likes_count as (" +
+            "select post_id, count(*) as lk from likes group by post_id )" +
+            "select p.* from posts p join likes_count l on p.id = l.post_id order by l.lk desc limit 5";
 
+    private final JdbcTemplate jdbcTemplate;
 
 
     public PostsRepositoryImpl(DataSource dataSource) {
@@ -38,6 +42,10 @@ public class PostsRepositoryImpl implements PostsRepository {
     @Override
     public boolean updatePost(Post post) {
         return jdbcTemplate.update(SQL_UPDATE_POST, post.getTitle(), post.getBody(), post.getId()) > 0;
+    }
+
+    public Optional<List<Post>> findMostPopular(){
+        return Optional.of(jdbcTemplate.query(SQL_GET_MOST_POPULAR_POSTS, postMapper));
     }
 
     @Override
