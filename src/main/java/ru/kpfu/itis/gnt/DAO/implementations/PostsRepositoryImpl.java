@@ -17,6 +17,9 @@ public class PostsRepositoryImpl implements PostsRepository {
     private final static String SQL_GET_ALL_POSTS = "SELECT * from posts order by posts.created_at desc limit ? offset ?";
     //language=SQL
     private final static String SQL_GET_POST_BY_ID = "SELECT * from posts where id = ?";
+
+    //language=SQL
+    private final static String SQL_GET_POST_ID_BY_BODY_AND_TITLE = "SELECT id from posts where post_body=? and title=? LIMIT 1";
     //language=SQL
     private final static String SQL_UPDATE_POST = "UPDATE posts SET title=?, post_body =?, edited_at = current_timestamp where id = ?";
 
@@ -25,6 +28,8 @@ public class PostsRepositoryImpl implements PostsRepository {
             "values(?, ? , ?)";
 
     private final JdbcTemplate jdbcTemplate;
+
+
 
     public PostsRepositoryImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -48,7 +53,15 @@ public class PostsRepositoryImpl implements PostsRepository {
 
     @Override
     public boolean addPost(Post post) {
-        return jdbcTemplate.update(SQL_INSERT_POST, post.getTitle(), post.getAuthor_id()) > 0;
+        return jdbcTemplate.update(SQL_INSERT_POST, post.getTitle(), post.getBody(), post.getAuthor_id()) > 0;
+    }
+
+
+    public int findPostByBodyAndTitle(String body, String title) {
+        return jdbcTemplate.queryForObject(SQL_GET_POST_ID_BY_BODY_AND_TITLE,
+                new Object[]{body, title},
+                Integer.class
+        );
     }
 
 

@@ -37,12 +37,17 @@ CREATE TABLE COMMENTS
     created_at timestamp default current_timestamp
 );
 
-CREATE TABLE TAGS
+CREATE TABLE POST_TAGS
 (
     id        serial primary key,
-    tag_title varchar(80) not null UNIQUE,
-    post_id   integer     not null references posts (id) check ( post_id >= 0 ),
-    UNIQUE (post_id, tag_title)
+    tag_name_id integer not null references TAG_NAMES(id) check ( tag_name_id > 0),
+    post_id   integer   not null references posts (id) check ( post_id > 0 ),
+    UNIQUE (tag_name_id, post_id)
+);
+
+CREATE TABLE TAG_NAMES(
+   id serial primary key,
+   name varchar not null unique
 );
 
 

@@ -11,7 +11,8 @@ public interface CommentsService {
 
     List<Comment> getComments(Post post, int limit, int offset) throws DBException;
 
-    boolean addComment(Comment comment);
+    void addComment(Comment comment) throws DBException;
+
 
 
 }

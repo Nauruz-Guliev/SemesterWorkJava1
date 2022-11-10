@@ -2,8 +2,7 @@
     .h-custom {
         height: 100vh !important;
     }
+    .btn {
+        color: red;
+    }
 }
-.btn btn-primary {
-    color: red;
-}
-

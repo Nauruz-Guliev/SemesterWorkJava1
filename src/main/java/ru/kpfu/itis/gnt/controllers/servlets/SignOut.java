@@ -2,9 +2,8 @@ package ru.kpfu.itis.gnt.controllers.servlets;
 
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
-import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
+import ru.kpfu.itis.gnt.services.implementations.UsersService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
@@ -12,10 +11,10 @@ import java.io.IOException;
 @WebServlet("/signout")
 public class SignOut extends HttpServlet {
 
-    private UsersAuthenticationService usersService;
+    private UsersService usersService;
     @Override
     public void init() {
-        usersService = new UsersAuthenticationService(
+        usersService = new UsersService(
                 (UsersRepositoryJDBCTemplateImpl)  getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO)
         );
     }

@@ -15,7 +15,7 @@
                     <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
 
-                    <form class="mx-1 mx-md-4" action="<c:url value="register"/>" method="POST">
+                    <form class="mx-1 mx-md-4" action="<c:url value="/register"/>" method="POST">
 
                         <div class="form-floating mb-3">
                             <input class="form-control" name="firstName" id="firstName" type="text"
@@ -50,13 +50,13 @@
                         </div>
 
 
-                       <t:select_countries></t:select_countries>
+                        <t:select_countries></t:select_countries>
 
                         <t:select_gender></t:select_gender>
 
 
                         <input class="form-control" type="date" name="date-of-birth" placeholder="Date of birth">
-                        <br>
+
 
                         <div class="form-check">
                             <input class="form-check-input" id="flexCheckChecked" type="checkbox"
@@ -65,13 +65,15 @@
                                 Policy agreement
                             </label>
                         </div>
-                        <br>
+
                         <input type="submit" value="CREATE ACCOUNT" class="btn btn-primary btn-lg btn-block">
                         <div class="div-messages">
-                            <c:forEach begin="0" end="${fn:length(errorList) - 1}" var="index">
-                                <div class="div-error-message"><c:out value="${errorList[index]}"/></
-                                >
-                            </c:forEach>
+                            <c:if test="${not empty errorList}">
+                                <c:forEach begin="0" end="${fn:length(errorList) - 1}" var="index">
+                                    <div class="div-error-message"><c:out value="${errorList[index]}"/></
+                                    >
+                                </c:forEach>
+                            </c:if>
                         </div>
                     </form>
                 </div>

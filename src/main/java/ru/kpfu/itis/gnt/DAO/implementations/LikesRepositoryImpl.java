@@ -61,7 +61,7 @@ public class LikesRepositoryImpl implements LikesRepository {
     }
 
     @Override
-    public boolean findPostLike(int user_id, int post_id) {
+    public boolean isPostLikePresent(int user_id, int post_id) {
         try {
             jdbcTemplate.queryForObject(SQL_FIND_POST_LIKE, new Object[]{post_id, user_id}, likeRowMapper);
             return true;
@@ -81,7 +81,7 @@ public class LikesRepositoryImpl implements LikesRepository {
     }
 
     @Override
-    public int countCommentLike(int comment_id) {
+    public int countCommentLike(int comment_id) throws NullPointerException {
         return jdbcTemplate.queryForObject(SQL_FIND_COMMENT_COUNT,
                 new Object[]{comment_id},
                 Integer.class
@@ -90,7 +90,7 @@ public class LikesRepositoryImpl implements LikesRepository {
     }
 
     @Override
-    public int countPostLike(int post_id) {
+    public int countPostLike(int post_id) throws NullPointerException {
         return jdbcTemplate.queryForObject(SQL_FIND_POST_COUNT,
                 new Object[]{post_id},
                 Integer.class

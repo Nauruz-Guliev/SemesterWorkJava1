@@ -2,7 +2,7 @@ package ru.kpfu.itis.gnt.filters;
 
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
-import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
+import ru.kpfu.itis.gnt.services.implementations.UsersService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,10 +17,10 @@ public class AdminPageFilter extends HttpFilter {
 
     private boolean isAdminPage;
 
-    private UsersAuthenticationService usersService;
+    private UsersService usersService;
     @Override
     public void init() throws ServletException {
-        usersService = new UsersAuthenticationService(
+        usersService = new UsersService(
                 (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO)
         );
     }

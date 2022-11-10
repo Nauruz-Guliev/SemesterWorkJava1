@@ -4,16 +4,14 @@ package ru.kpfu.itis.gnt.controllers.pages;
 
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.Utils.Encrypter;
-import ru.kpfu.itis.gnt.constants.CookieConstants;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.constants.PathsConstants;
 import ru.kpfu.itis.gnt.exceptions.DBException;
-import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
+import ru.kpfu.itis.gnt.services.implementations.UsersService;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,10 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/signin")
 public class SignIn extends HttpServlet{
 
-    private UsersAuthenticationService userService;
+    private UsersService userService;
     @Override
     public void init() throws ServletException {
-         userService = new UsersAuthenticationService(
+         userService = new UsersService(
                  (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO)
          );
     }
@@ -48,12 +46,7 @@ public class SignIn extends HttpServlet{
                 }
             }
         } catch (DBException e) {
-            resp.addCookie(
-                    new Cookie(
-                            CookieConstants.ERROR_MESSAGE,
-                            e.getMessage()
-                    )
-            );
+
         }
         req.setAttribute("errorMessage", "Wrong email or password");
         req.setAttribute("email", req.getParameter("email"));

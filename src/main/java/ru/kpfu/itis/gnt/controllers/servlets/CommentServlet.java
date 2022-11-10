@@ -1,27 +1,22 @@
 package ru.kpfu.itis.gnt.controllers.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.kpfu.itis.gnt.DAO.implementations.CommentsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.*;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.Comment;
 import ru.kpfu.itis.gnt.entities.CommentObject;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
-import ru.kpfu.itis.gnt.services.UsersService;
 import ru.kpfu.itis.gnt.services.implementations.CommentsServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
-import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
-import ru.kpfu.itis.gnt.services.implementations.UsersServiceImpl;
+import ru.kpfu.itis.gnt.services.implementations.UsersService;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -34,7 +29,7 @@ public class CommentServlet extends HttpServlet {
     private PostsServiceImpl postsService;
     private CommentsServiceImpl commentsService;
 
-    private UsersAuthenticationService usersService;
+    private UsersService usersService;
 
     private List<ru.kpfu.itis.gnt.entities.Comment> commentList;
 
@@ -44,20 +39,19 @@ public class CommentServlet extends HttpServlet {
     private Post post;
     private int commentAuthorId;
 
-    private PostsRepositoryImpl postsDao;
-    private UsersRepositoryJDBCTemplateImpl usersDao;
-    private CommentsRepositoryImpl commentsDao;
 
     @Override
     public void init() {
 
-        postsDao = (PostsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_POSTS_DAO);
-        usersDao = (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO);
-        commentsDao = (CommentsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_COMMENTS_DAO);
+        PostsRepositoryImpl  postsDao = (PostsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_POSTS_DAO);
+        UsersRepositoryJDBCTemplateImpl usersDao = (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO);
+        CommentsRepositoryImpl commentsDao = (CommentsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_COMMENTS_DAO);
+        TagsRepositoryImpl tagsDao = (TagsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_TAGS_DAO);
+        TagNamesRepositoryImpl tagNamesDao= (TagNamesRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_TAG_NAME_DAO);
 
-        postsService = new PostsServiceImpl(postsDao, usersDao);
+        postsService = new PostsServiceImpl(postsDao, usersDao, tagsDao, tagNamesDao);
         commentsService = new CommentsServiceImpl(postsDao, usersDao, commentsDao);
-        usersService = new UsersAuthenticationService(usersDao);
+        usersService = new UsersService(usersDao);
 
     }
 

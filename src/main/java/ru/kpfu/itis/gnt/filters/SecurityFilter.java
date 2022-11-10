@@ -3,8 +3,7 @@ package ru.kpfu.itis.gnt.filters;
 
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
-import ru.kpfu.itis.gnt.services.UsersService;
-import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
+import ru.kpfu.itis.gnt.services.implementations.UsersService;
 
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -17,15 +16,15 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebFilter("/*")
 public class SecurityFilter extends HttpFilter {
-    protected final String[] protectedPaths = {"/profile/general", "/comment", "profile/security", "profile/update"};
+    protected final String[] protectedPaths = {"/profile/general", "/comment", "profile/security", "profile/update", "post/create"};
 
     private final static String USER = "user";
 
-    private  UsersAuthenticationService userService;
+    private UsersService userService;
 
     @Override
     public void init() {
-        userService = new UsersAuthenticationService(
+        userService = new UsersService(
                 (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO)
         );
     }
@@ -42,7 +41,6 @@ public class SecurityFilter extends HttpFilter {
         }
 
         try {
-
             boolean isUserSigned = userService.isSigned(req);
             if (prot && !isUserSigned) {
                 res.sendRedirect(req.getContextPath() + "/main");

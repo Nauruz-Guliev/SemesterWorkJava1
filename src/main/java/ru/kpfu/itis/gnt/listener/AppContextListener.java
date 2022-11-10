@@ -2,8 +2,10 @@ package ru.kpfu.itis.gnt.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import ru.kpfu.itis.gnt.DAO.TagNamesRepository;
 import ru.kpfu.itis.gnt.DAO.implementations.*;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
+import ru.kpfu.itis.gnt.DAO.datasource.DataSource;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -21,6 +23,10 @@ public class AppContextListener implements ServletContextListener {
     private CommentsRepositoryImpl commentsDao;
     private LikesRepositoryImpl likesDao;
 
+    private TagsRepositoryImpl tagDao;
+
+    private TagNamesRepository tagNameDao;
+
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         dataSource = new DataSource().getDataSource();
@@ -28,7 +34,11 @@ public class AppContextListener implements ServletContextListener {
         postDao = new PostsRepositoryImpl(dataSource);
         commentsDao = new CommentsRepositoryImpl(dataSource);
         likesDao = new LikesRepositoryImpl(dataSource);
+        tagNameDao = new TagNamesRepositoryImpl(dataSource);
+        tagDao = new TagsRepositoryImpl(dataSource);
 
+        servletContextEvent.getServletContext().setAttribute(ListenerConstants.KEY_TAGS_DAO, tagDao);
+        servletContextEvent.getServletContext().setAttribute(ListenerConstants.KEY_TAG_NAME_DAO, tagNameDao);
         servletContextEvent.getServletContext().setAttribute(ListenerConstants.KEY_LIKES_DAO, likesDao);
         servletContextEvent.getServletContext().setAttribute(ListenerConstants.KEY_POSTS_DAO, postDao);
         servletContextEvent.getServletContext().setAttribute(ListenerConstants.KEY_COMMENTS_DAO, commentsDao);

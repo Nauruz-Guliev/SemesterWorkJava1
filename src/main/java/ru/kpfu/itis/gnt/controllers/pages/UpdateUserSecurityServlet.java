@@ -3,7 +3,7 @@ package ru.kpfu.itis.gnt.controllers.pages;
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.constants.FieldsConstants;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
-import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
+import ru.kpfu.itis.gnt.services.implementations.UsersService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,11 +18,11 @@ public class UpdateUserSecurityServlet extends HttpServlet {
     private String oldPassword;
     private String newPassword;
     private String confirmNewPassword;
-    private UsersAuthenticationService userService;
+    private UsersService userService;
 
     @Override
     public void init() throws ServletException {
-        userService = new UsersAuthenticationService(
+        userService = new UsersService(
                 (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO)
         );
     }

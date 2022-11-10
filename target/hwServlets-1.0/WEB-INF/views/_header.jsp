@@ -36,6 +36,8 @@
                     </li>
                     <li class="nav-item"><a class="nav-link" href="<c:url value="/signout"/>">Sign
                         Out</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<c:url value="/post/create"/>">Create post</a>
+                    </li>
                 </c:if>
                 <c:if test="${not empty admin}">
                     <li class="nav-item"><a class="nav-link" href="<c:url value="/admin"/>">Admin</a>

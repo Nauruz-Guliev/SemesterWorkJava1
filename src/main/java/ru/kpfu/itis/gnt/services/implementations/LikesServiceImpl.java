@@ -4,10 +4,8 @@ import ru.kpfu.itis.gnt.DAO.implementations.CommentsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.LikesRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.LikesService;
-
-import javax.servlet.annotation.WebServlet;
-
 
 
 public class LikesServiceImpl implements LikesService {
@@ -26,18 +24,24 @@ public class LikesServiceImpl implements LikesService {
 
 
     @Override
-    public boolean likeComment(int comment_id, int user_id) {
-        return false;
+    public void likeComment(int comment_id, int user_id) throws DBException {
+        if(!likesDao.likeComment(user_id, comment_id)) {
+            throw new DBException("Couldn't like the comment");
+        }
     }
 
     @Override
     public boolean likePost(int post_id, int user_id) {
-        if (!likesDao.findPostLike(user_id, post_id)) {
+        if (!likesDao.isPostLikePresent(user_id, post_id)) {
             return likesDao.likePost(user_id, post_id);
         } else {
             likesDao.deletePostLike(user_id, post_id);
             return false;
         }
+    }
+
+    public boolean isPostLikedByUser(int post_id, int user_id) {
+        return likesDao.likePost(user_id, post_id);
     }
 
     @Override

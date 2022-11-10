@@ -3,18 +3,14 @@ package ru.kpfu.itis.gnt.services.implementations;
 import ru.kpfu.itis.gnt.DAO.implementations.CommentsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
-import ru.kpfu.itis.gnt.Utils.CommentDateComparator;
-import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.Comment;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.CommentsService;
 
-import javax.servlet.ServletContext;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,8 +42,10 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
-    public boolean addComment(Comment comment) {
-        return commentsDao.addComment(comment);
+    public void addComment(Comment comment) throws DBException {
+        if(!commentsDao.addComment(comment)){
+            throw new DBException("Couldn't add the comment");
+        }
     }
 
 
@@ -60,6 +58,8 @@ public class CommentsServiceImpl implements CommentsService {
     /**
      У каждого комментария обязательно найдётся автор, так как в бд комментарий не может
      храниться без привязки к автору.
+
+     почему-то не работает сортировка по дате.
      */
     public HashMap<Comment, User> getCommentAuthors(List<Comment> comments) throws ParseException {
         HashMap<Comment, User> commentUserHashMap = new HashMap<>();
@@ -69,14 +69,15 @@ public class CommentsServiceImpl implements CommentsService {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
-        Comparator<Comment> byDate = Comparator.comparing((Comment c) -> {
+        Comparator<Comment> byDate = (Comment c1, Comment c2) -> {
             try {
-                return formatter.parse(c.getCreated_at().substring(0, 19));
+                return formatter.parse(c1.getCreated_at().substring(0,19)).compareTo(
+                        formatter.parse(c2.getCreated_at().substring(0,19))
+                );
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
-
-        });
+        };
 
         return commentUserHashMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(byDate))

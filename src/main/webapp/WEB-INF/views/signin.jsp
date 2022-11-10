@@ -27,9 +27,7 @@
                         </div>
 
                         <br>
-                        <input type="submit" value="Sing In" class="btn btn-primary btn-lg btn-block"
-                               onclick="showPopup()"
-                        >
+                        <input type="submit" value="Sing In" class="btn btn-primary btn-lg btn-block">
                         <c:if test="${not empty errorMessage}">
                             <div class="div-error-message">
                                 <c:out value="${errorMessage}"/>

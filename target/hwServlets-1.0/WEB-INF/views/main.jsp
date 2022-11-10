@@ -3,32 +3,35 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 
+<div class="container-fluid table-bordered">
 
-<c:forEach begin="0" end="${fn:length(postsList) - 1}" var="i">
-    <div class="container-fluid table-bordered">
-        <div class="row">
-
+    <div class="row">
+        <c:forEach begin="0" end="${fn:length(postsList) - 1}" var="i">
             <div class="col-8">
                 <div class="card-body">
-                    <div class="card bg-light mb-3 p-4 m-2" >
+                    <div class="card bg-light mb-3 p-4 m-2">
                         <h5 class="card-title">${postsList[i].title}</h5>
                         <p class="card-text"> ${postsList[i].body}</p>
+
+                        <a href="${pageContext.request.contextPath}/post?postIndex=${postsList[i].id}"
+                           class="stretched-link"></a>
                     </div>
 
-                    <a href="${pageContext.request.contextPath}/article?postIndex=${postsList[i].id}" class="stretched-link"></a>
                 </div>
             </div>
-
-            <div class="col-4">
-                <div class="card-body">
-                    <div class="card bg-light mb-3 p-4 m-2">
-                        <h5 class="card-title">VLALBASDADASD</h5>
+            <c:if test="${i==0}">
+                <div class="col-4 h-100">
+                    <div class="card-body">
+                        <div class="card bg-light mb-3 p-4 m-2">
+                            <h5 class="card-title">VLALBASDADASD</h5>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </c:if>
+        </c:forEach>
+
     </div>
-</c:forEach>
+</div>
 
 <%@include file="/WEB-INF/views/_footer.jsp" %>
 

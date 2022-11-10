@@ -18,7 +18,7 @@ public class CommentsRepositoryImpl implements CommentsRepository {
     private final JdbcTemplate jdbcTemplate;
 
     //language=SQL
-    private static final String SQL_GET_ALL_COMMENTS = "SELECT * FROM comments where post_id =? order by created_at asc LIMIT ? offset ?";
+    private static final String SQL_GET_ALL_COMMENTS = "SELECT * FROM comments where post_id =? LIMIT ? offset ?";
 
     //language=SQL
     private static final String SQL_ADD_COMMENT = "INSERT INTO comments(text, post_id, author_id)" +

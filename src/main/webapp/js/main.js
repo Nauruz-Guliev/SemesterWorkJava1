@@ -1,5 +1,28 @@
+let tagCount = 0;
+
+window.onload = function () {
+    let btnAddTag = document.getElementById('btn-add-tag');
+    if (btnAddTag != null) {
+        btnAddTag.addEventListener('click', addTag, false);
+    }
+}
+
+function addTag() {
+    if (tagCount < 4) {
+        let body = document.getElementById('create-article');
+        let tagFieldClone = document.getElementById('tag-field').cloneNode(true);
+        tagFieldClone.children['tag'].name = 'tag' + tagCount;
+        tagFieldClone.children['tag'].value = "";
+        body.append(tagFieldClone);
+        tagCount++;
+    } else {
+        showPopup("Cannot create that many tags!", "Error");
+    }
+}
+
+
 function addLike(postId) {
-    return fetch('http://localhost:8888/article/like?postIndex=' + postId)
+    return fetch('http://localhost:8888/post/like?postIndex=' + postId)
         .then((response) => {
             return response.json();
         }).then((likeCount) => {
@@ -16,6 +39,8 @@ function addComment(postId, comment) {
             }).then((comment) => {
                 addCommentCard(comment);
             })
+    } else {
+        showPopup("Your comment can not be empty", "Details")
     }
 }
 
@@ -28,13 +53,12 @@ function setLikeCount(like) {
     }
 }
 
-
 let checkCookie = function () {
     const currentCookie = document.cookie;
     let cookie = divideCookie(currentCookie);
     // если ключ куки содержит слово message, то показываю диалог
-    if (cookie[0].includes("Message")) {
-        showPopup(cookie[1].replaceAll("-", " "), cookie[0].replaceAll('Message', ' message'));
+    if (cookie[0].includes("Message") || cookie[0] === "Message") {
+        showPopup(cookie[1].replaceAll("-", " "), cookie[0]);
         // удаляю сообщение после того, как оно было показано
         document.cookie = cookie[0] + '=; Max-Age=0'
     }
@@ -43,6 +67,7 @@ let checkCookie = function () {
 function divideCookie(cookie) {
     return cookie.split('=');
 }
+
 // с интервалом проверяю есть ли cookie
 window.setInterval(checkCookie, 100);
 
@@ -56,7 +81,6 @@ const showPopup = (message, title) => {
 
 
 function addCommentCard(comment) {
-    debugger;
     let clone = document.getElementById('commentDiv').children[0].cloneNode(true);
 
     clone.children[0].children[0].children[0].children[0].children[0].innerText = comment.authorName;

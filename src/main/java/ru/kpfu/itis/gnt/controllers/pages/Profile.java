@@ -1,17 +1,15 @@
 package ru.kpfu.itis.gnt.controllers.pages;
 
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
-import ru.kpfu.itis.gnt.Utils.CookieMessageAdder;
-import ru.kpfu.itis.gnt.constants.CookieConstants;
+import ru.kpfu.itis.gnt.Utils.RedirectHelper;
 import ru.kpfu.itis.gnt.constants.FieldsConstants;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
-import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
+import ru.kpfu.itis.gnt.services.implementations.UsersService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +19,7 @@ import java.io.IOException;
 public class Profile extends HttpServlet {
 
     private int userId;
-    private UsersAuthenticationService usersService;
+    private UsersService usersService;
     private User user;
 
     private User updatedUser;
@@ -36,26 +34,27 @@ public class Profile extends HttpServlet {
 
     @Override
     public void init() {
-        usersService = new UsersAuthenticationService(
+        usersService = new UsersService(
                 (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO)
         );
     }
 
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        RedirectHelper.showExistingPopupMessage(resp, req);
         try {
             initValues(req, resp);
             req.setAttribute(FieldsConstants.FIELD_USER, user);
             getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(req, resp);
 
         } catch (ServletException | DBException | IOException ex) {
-            CookieMessageAdder.addMessage(resp, CookieConstants.ERROR_MESSAGE, ex.getMessage());
+            RedirectHelper.redirect(req, resp, "/profile/general", ex.getMessage());
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             initAttributes(req);
             updatedUser = new User(
@@ -69,12 +68,9 @@ public class Profile extends HttpServlet {
             updatedUser.setId(userId);
             usersService.updateUser(updatedUser);
             req.setAttribute(FieldsConstants.FIELD_USER, usersService.findUserById(userId));
-            CookieMessageAdder.addMessage(resp, CookieConstants.SUCCESS_MESSAGE, "User has been updated successfully!");
-            doGet(req, resp);
-
-        } catch (DBException | NumberFormatException ex) {
-            CookieMessageAdder.addMessage(resp, CookieConstants.ERROR_MESSAGE, ex.getMessage());
-
+            RedirectHelper.redirect(req, resp, "/profile/general", "Profile was updated successfully");
+        } catch (DBException | NumberFormatException | IOException ex) {
+            RedirectHelper.redirect(req, resp, "/profile/general", ex.getMessage());
         }
     }
 

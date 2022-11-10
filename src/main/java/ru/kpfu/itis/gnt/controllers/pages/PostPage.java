@@ -1,26 +1,20 @@
 package ru.kpfu.itis.gnt.controllers.pages;
 
-import ru.kpfu.itis.gnt.DAO.implementations.CommentsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.implementations.LikesRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
-import ru.kpfu.itis.gnt.Utils.CookieMessageAdder;
-import ru.kpfu.itis.gnt.constants.CookieConstants;
+import ru.kpfu.itis.gnt.DAO.implementations.*;
+import ru.kpfu.itis.gnt.Utils.RedirectHelper;
 import ru.kpfu.itis.gnt.constants.FieldsConstants;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.Comment;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
-import ru.kpfu.itis.gnt.services.UsersService;
 import ru.kpfu.itis.gnt.services.implementations.CommentsServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.LikesServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
-import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
+import ru.kpfu.itis.gnt.services.implementations.UsersService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +23,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
-@WebServlet("/article")
+@WebServlet("/post")
 
 public class PostPage extends HttpServlet {
     private Post post;
@@ -45,15 +39,10 @@ public class PostPage extends HttpServlet {
     private CommentsServiceImpl commentsService;
 
     private LikesServiceImpl likesService;
-    private UsersAuthenticationService usersService;
+    private UsersService usersService;
 
     private int userId;
 
-    private PostsRepositoryImpl postsDao;
-    private UsersRepositoryJDBCTemplateImpl usersDao;
-    private CommentsRepositoryImpl commentsDao;
-
-    private LikesRepositoryImpl likesDao;
 
     private int commentCount;
     private int commentOffset;
@@ -61,13 +50,15 @@ public class PostPage extends HttpServlet {
 
     @Override
     public void init() {
-        postsDao = (PostsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_POSTS_DAO);
-        usersDao = (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO);
-        commentsDao = (CommentsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_COMMENTS_DAO);
-        likesDao = (LikesRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_LIKES_DAO);
+        PostsRepositoryImpl postsDao = (PostsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_POSTS_DAO);
+        UsersRepositoryJDBCTemplateImpl usersDao = (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO);
+        CommentsRepositoryImpl commentsDao = (CommentsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_COMMENTS_DAO);
+        LikesRepositoryImpl likesDao = (LikesRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_LIKES_DAO);
+        TagsRepositoryImpl tagsDao = (TagsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_TAGS_DAO);
+        TagNamesRepositoryImpl tagNamesDao= (TagNamesRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_TAG_NAME_DAO);
 
-        usersService = new UsersAuthenticationService(usersDao);
-        postsService = new PostsServiceImpl(postsDao, usersDao);
+        usersService = new UsersService(usersDao);
+        postsService = new PostsServiceImpl(postsDao, usersDao, tagsDao, tagNamesDao);
         commentsService = new CommentsServiceImpl(postsDao, usersDao, commentsDao);
         likesService = new LikesServiceImpl(usersDao, likesDao, postsDao, commentsDao);
     }
@@ -75,6 +66,7 @@ public class PostPage extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
+            RedirectHelper.showExistingPopupMessage(resp, req);
             String offset = req.getParameter("offset");
             if (offset != null) {
                 commentOffset = Integer.parseInt(offset);
@@ -95,11 +87,9 @@ public class PostPage extends HttpServlet {
             req.setAttribute("userId", userId);
             req.setAttribute("likeCount", likeCount);
             req.setAttribute("commentCount", commentCount);
-
-            getServletContext().getRequestDispatcher("/WEB-INF/views/article.jsp").forward(req, resp);
+            getServletContext().getRequestDispatcher("/WEB-INF/views/post.jsp").forward(req, resp);
         } catch (ParseException | ServletException | IOException | NumberFormatException | DBException ex) {
-            CookieMessageAdder.addMessage(resp, CookieConstants.ERROR_MESSAGE, ex.getMessage());
-
+            RedirectHelper.redirect(req, resp, "/post", ex.getMessage());
         }
     }
 

@@ -40,7 +40,7 @@ public class UsersRepositoryJDBCTemplateImpl implements UsersRepository {
 
     //language=SQL
     private static final String SQL_UPDATE_USER = "UPDATE users set firstname = ?, lastname = ?, email = ?, country = ?, gender = ?, dateofbirth = TO_DATE(?,'YYYY-MM-DD')" +
-             "where id = ?";
+            "where id = ?";
 
     public UsersRepositoryJDBCTemplateImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -48,14 +48,9 @@ public class UsersRepositoryJDBCTemplateImpl implements UsersRepository {
     }
 
 
-
     @Override
     public Optional<List<User>> findAll() {
-        List<User> listOfUsers = jdbcTemplate.query(SQL_GET_ALL_USERS, userMapper);
-        if (!listOfUsers.isEmpty()) {
-            return Optional.of(listOfUsers);
-        }
-        return Optional.empty();
+        return Optional.of(jdbcTemplate.query(SQL_GET_ALL_USERS, userMapper));
     }
 
     @Override
@@ -98,26 +93,14 @@ public class UsersRepositoryJDBCTemplateImpl implements UsersRepository {
 
     @Override
     public Optional<User> findById(int id) {
-        try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_GET_USER_BY_ID, new Object[]{id}, userMapper));
-        } catch (EmptyResultDataAccessException ex) {
-            return Optional.empty();
-        }
+        return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_GET_USER_BY_ID, new Object[]{id}, userMapper));
     }
 
     @Override
     public Optional<User> findUser(String email, String password) {
-        try {
-            User user = jdbcTemplate.queryForObject(SQL_FIND_USER, new Object[]{email, password}, userMapper);
-            if (user != null) {
-                return Optional.of(user);
-            }
-        } catch (EmptyResultDataAccessException ex) {
-            return Optional.empty();
-        }
-        return Optional.empty();
-    }
+           return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_FIND_USER, new Object[]{email, password}, userMapper));
 
+    }
 
     private final RowMapper<User> userMapper =
             (row, rowNumber) -> {

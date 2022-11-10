@@ -1,17 +1,13 @@
 package ru.kpfu.itis.gnt.controllers.servlets;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.kpfu.itis.gnt.DAO.implementations.CommentsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.implementations.LikesRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
-import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
+import ru.kpfu.itis.gnt.DAO.implementations.*;
 import ru.kpfu.itis.gnt.constants.FieldsConstants;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.services.implementations.CommentsServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.LikesServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
-import ru.kpfu.itis.gnt.services.implementations.UsersAuthenticationService;
+import ru.kpfu.itis.gnt.services.implementations.UsersService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,19 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-@WebServlet("/article/like")
+@WebServlet("/post/like")
 public class LikeServlet extends HttpServlet {
 
     private PostsServiceImpl postsService;
     private CommentsServiceImpl commentsService;
-    private UsersAuthenticationService usersService;
+    private UsersService usersService;
     private LikesServiceImpl likesService;
 
-    private PostsRepositoryImpl postsDao;
-    private UsersRepositoryJDBCTemplateImpl usersDao;
-
-    private LikesRepositoryImpl likesDao;
-    private CommentsRepositoryImpl commentsDao;
 
 
     private int postId;
@@ -42,15 +33,17 @@ public class LikeServlet extends HttpServlet {
 
     @Override
     public void init() {
-        postsDao = (PostsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_POSTS_DAO);
-        usersDao = (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO);
-        commentsDao = (CommentsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_COMMENTS_DAO);
-        likesDao = (LikesRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_LIKES_DAO);
+        PostsRepositoryImpl postsDao = (PostsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_POSTS_DAO);
+        UsersRepositoryJDBCTemplateImpl usersDao = (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO);
+        CommentsRepositoryImpl commentsDao = (CommentsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_COMMENTS_DAO);
+        LikesRepositoryImpl likesDao = (LikesRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_LIKES_DAO);
+        TagsRepositoryImpl tagsDao = (TagsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_TAGS_DAO);
+        TagNamesRepositoryImpl tagNamesDao= (TagNamesRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_TAG_NAME_DAO);
 
         likesService = new LikesServiceImpl(usersDao, likesDao, postsDao, commentsDao);
-        postsService = new PostsServiceImpl(postsDao, usersDao);
+        postsService = new PostsServiceImpl(postsDao, usersDao, tagsDao, tagNamesDao);
         commentsService = new CommentsServiceImpl(postsDao, usersDao, commentsDao);
-        usersService = new UsersAuthenticationService(usersDao);
+        usersService = new UsersService(usersDao);
     }
 
     @Override
@@ -63,7 +56,7 @@ public class LikeServlet extends HttpServlet {
 
             likePost(resp, (ObjectMapper) getServletContext().getAttribute(ListenerConstants.KEY_OBJECT_MAPPER), req);
 
-            // getServletContext().getRequestDispatcher("/WEB-INF/views/article.jsp").forward(req, resp);
+            // getServletContext().getRequestDispatcher("/WEB-INF/views/post.jsp").forward(req, resp);
         } catch (Exception ex) {
             System.out.println("asdasd" + ex);
         }
@@ -71,10 +64,9 @@ public class LikeServlet extends HttpServlet {
 
     private void likePost(HttpServletResponse resp, ObjectMapper objectMapper, HttpServletRequest req) throws IOException {
         initValues(req);
-        System.out.println(postId + " " + userId);
+        System.out.println("SASA" + postId + " " + userId);
         likesService.likePost(postId, userId);
         postLikeCount = likesService.countPostLikes(postId);
-        System.out.println(postId + " " + postLikeCount);
         String jsonResponse = objectMapper.writeValueAsString(postLikeCount);
         resp.setContentType("application/json");
         resp.getWriter().write(jsonResponse);
