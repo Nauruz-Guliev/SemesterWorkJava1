@@ -10,6 +10,7 @@ import ru.kpfu.itis.gnt.entities.Tag;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.implementations.*;
+import ru.kpfu.itis.gnt.validators.ClassNameGetter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -88,7 +89,7 @@ public class PostPage extends HttpServlet {
             getServletContext().getRequestDispatcher("/WEB-INF/views/post.jsp").forward(req, resp);
         } catch (ParseException | ServletException | IOException | DBException ex) {
             //  RedirectHelper.redirect(req, resp, "/post", ex.getMessage());
-             RedirectHelper.forwardWithMessage(req, resp, "main",  ex.getMessage(), ex.getClass().getName());
+             RedirectHelper.forwardWithMessage(req, resp, "main",  ex.getMessage(), ClassNameGetter.getClassName(ex.getClass().getName()));
         } catch (NumberFormatException ex) {
             resp.sendRedirect("/main");
         }

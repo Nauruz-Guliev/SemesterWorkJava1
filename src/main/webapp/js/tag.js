@@ -16,6 +16,6 @@ function addTag() {
         body.append(tagFieldClone);
         tagCount++;
     } else {
-        showPopup("Cannot create that many tags!", "Error");
+        showPopup("Cannot create that many tags!", "Error", false);
     }
 }

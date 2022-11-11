@@ -12,6 +12,7 @@ import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.implementations.CommentsServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.UsersService;
+import ru.kpfu.itis.gnt.validators.ClassNameGetter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -97,7 +98,7 @@ public class CommentServlet extends HttpServlet {
                 resp.getWriter().write(jsonResponse);
             }
         } catch (IOException | DBException | NumberFormatException ex) {
-            RedirectHelper.forwardWithMessage(req, resp, "main",  ex.getMessage(), ex.getClass().getName());
+            RedirectHelper.forwardWithMessage(req, resp, "main",  ex.getMessage(), ClassNameGetter.getClassName(ex.getClass().getName()));
         }
     }
 

@@ -9,6 +9,7 @@ import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 import ru.kpfu.itis.gnt.exceptions.ValidationException;
 import ru.kpfu.itis.gnt.services.implementations.UsersService;
+import ru.kpfu.itis.gnt.validators.ClassNameGetter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -42,17 +43,14 @@ public class UpdateUserSecurityPage extends HttpServlet {
             userId = (int) req.getSession().getAttribute(FieldsConstants.USER_ID_ATTRIBUTE);
             email = (String) req.getSession().getAttribute(FieldsConstants.EMAIL_FIELD_PARAMETER);
             if (Objects.equals(req.getParameter("confirmed"), "true")) {
-                System.out.println(userId);
                 userService.removeUser(userId);
                 userService.signOut(req);
-                System.out.println("ASDASDASDASD");
                 resp.sendRedirect(req.getContextPath() + "/main");
             } else {
                 System.out.println("ASDASDASD");
                 getServletContext().getRequestDispatcher("/WEB-INF/views/profile_security_page.jsp").forward(req, resp);
             }
         } catch (DBException ex) {
-            System.out.println(ex.getMessage());
             RedirectHelper.forwardWithMessage(req, resp, "/profile/security", ex.getMessage(), ex.getClass().getName());
         }
 
@@ -71,7 +69,7 @@ public class UpdateUserSecurityPage extends HttpServlet {
                     oldPassword
             );
         } catch (EmptyResultDbException | AuthenticationException | ValidationException e) {
-            throw new RuntimeException(e);
+            RedirectHelper.forwardWithMessage(req, resp, "profile_security_page", e.getMessage(), ClassNameGetter.getClassName(e.getClass().getName()));
         }
         getServletContext().getRequestDispatcher("/WEB-INF/views/profile_security_page.jsp").forward(req, resp);
     }

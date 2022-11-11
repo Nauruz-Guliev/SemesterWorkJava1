@@ -8,6 +8,7 @@ import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.constants.PathsConstants;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.implementations.UsersService;
+import ru.kpfu.itis.gnt.validators.ClassNameGetter;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -45,7 +46,7 @@ public class SignInPage extends HttpServlet {
                 resp.sendRedirect(getServletContext().getContextPath() + PathsConstants.PROFILE_MAIN_PAGE_PATH);
             }
         } catch (DBException e) {
-            RedirectHelper.forwardWithMessage(req, resp, "/main",  e.getMessage(), e.getClass().getName());
+            RedirectHelper.forwardWithMessage(req, resp, "/main",  e.getMessage(), ClassNameGetter.getClassName(e.getClass().getName()));
         }
         req.setAttribute("errorMessage", "Wrong email or password");
         req.setAttribute("email", req.getParameter("email"));

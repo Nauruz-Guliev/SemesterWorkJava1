@@ -7,6 +7,7 @@ import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.implementations.UsersService;
+import ru.kpfu.itis.gnt.validators.ClassNameGetter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -69,7 +70,7 @@ public class ProfilePage extends HttpServlet {
             req.setAttribute(FieldsConstants.FIELD_USER, usersService.findUserById(userId));
             RedirectHelper.forwardWithMessage(req, resp, "profile",  "Profile was updated", "Success");
         } catch (DBException | NumberFormatException | IOException | ServletException ex) {
-            RedirectHelper.forwardWithMessage(req, resp, "profile",  ex.getMessage(), ex.getClass().getName());
+            RedirectHelper.forwardWithMessage(req, resp, "profile",  ex.getMessage(), ClassNameGetter.getClassName(ex.getClass().getName()));
         }
     }
 

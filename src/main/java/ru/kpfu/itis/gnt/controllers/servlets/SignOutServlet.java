@@ -4,6 +4,7 @@ import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.Utils.RedirectHelper;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.services.implementations.UsersService;
+import ru.kpfu.itis.gnt.validators.ClassNameGetter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
@@ -27,7 +28,7 @@ public class SignOutServlet extends HttpServlet {
             usersService.signOut(req);
             resp.sendRedirect(getServletContext().getContextPath() + "/");
         } catch (IOException e) {
-            RedirectHelper.forwardWithMessage(req, resp, "main",  e.getMessage(), e.getClass().getName());
+            RedirectHelper.forwardWithMessage(req, resp, "main",  e.getMessage(), ClassNameGetter.getClassName(e.getClass().getName()));
         }
     }
 

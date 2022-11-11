@@ -1,18 +1,29 @@
-function addComment(postId, comment) {
-    document.getElementById('comment').value = "";
-    if (comment !== "") {
-        return fetch('http://localhost:8888/comment?postIndex=' + postId + '&comment=' + comment)
-            .then((response) => {
-                return response.json();
-            }).then((comment) => {
-                addCommentCard(comment);
-            })
-    } else {
-        showPopup("Your comment can not be empty", "Error")
+window.onload = function () {
+    let postIdDiv = document.getElementById('postIdDiv');
+    let btnAddComm = document.getElementById('btnAddComm');
+
+    if(postIdDiv !== null) {
+        btnAddComm.addEventListener('click', function () {
+            let comment = document.getElementById('comment').value;
+            let postId = postIdDiv.innerText;
+            if (comment !== "") {
+                return fetch('http://localhost:8888/comment?postIndex=' + postId + '&comment=' + comment)
+                    .then((response) => {
+                        return response.json();
+                    }).then((comment) => {
+                        addCommentCard(comment);
+                    })
+            } else {
+                showPopup("Your comment can not be empty", "Error", false)
+            }
+
+        }, false);
     }
 }
 
+
 function addCommentCard(comment) {
+    document.getElementById('comment').value = "";
     let commDivClone = document.getElementById('commentDivInvisible').cloneNode(true);
     commDivClone.style.display = "block";
     let childDiv = commDivClone.children[0];

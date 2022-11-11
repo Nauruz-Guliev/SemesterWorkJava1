@@ -22,7 +22,6 @@
             </p>
             <c:if test="${not empty postTags}">
                 <c:forEach var="tag" items="${postTags}">
-                    ${tag}
                     <li><a class="link-primary"
                     href="<c:url value="/main?tagId=${tag.tag_name_id}"/>"
                     >${tag.name}</a></li>
@@ -56,11 +55,13 @@
                    aria-label="Comment"
                    aria-describedby="basic-addon2">
             <div class="input-group-append">
-                <input onclick="addComment( ${post.id}, document.getElementById('comment').value)" type="submit"
+                <input id="btnAddComm" type="submit"
                        value="Add"
                        class="btn btn-dark">
             </div>
         </div>
+
+        <div id="postIdDiv">${post.id}</div>
 
     </c:if>
 

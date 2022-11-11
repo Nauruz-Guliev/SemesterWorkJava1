@@ -8,6 +8,7 @@ import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.exceptions.RegistrationException;
 import ru.kpfu.itis.gnt.services.implementations.UsersService;
+import ru.kpfu.itis.gnt.validators.ClassNameGetter;
 
 import java.io.IOException;
 
@@ -57,7 +58,7 @@ public class RegistrationPage extends HttpServlet {
                 RedirectHelper.forwardWithMessage(request, response, "signin",  "Couldn't register", "Error");
             }
         } catch (DBException | RegistrationException ex) {
-            RedirectHelper.forwardWithMessage(request, response, "signin",  ex.getMessage(), ex.getClass().getName());
+            RedirectHelper.forwardWithMessage(request, response, "signin",  ex.getMessage(), ClassNameGetter.getClassName(ex.getClass().getName()));
 
         }
     }

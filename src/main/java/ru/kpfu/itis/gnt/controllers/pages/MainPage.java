@@ -11,6 +11,7 @@ import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
+import ru.kpfu.itis.gnt.validators.ClassNameGetter;
 
 import java.io.IOException;
 import java.util.List;
@@ -53,7 +54,7 @@ public class MainPage extends HttpServlet {
 
             getServletContext().getRequestDispatcher("/WEB-INF/views/main.jsp").forward(req, resp);
         } catch (DBException e) {
-            RedirectHelper.forwardWithMessage(req, resp, "/main", e.getMessage(), e.getClass().getName());
+            RedirectHelper.forwardWithMessage(req, resp, "/main", e.getMessage(), ClassNameGetter.getClassName(e.getClass().getName()));
         } catch (NumberFormatException e) {
             resp.sendRedirect(req.getContextPath() + "/main");
         }

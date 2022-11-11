@@ -6,6 +6,8 @@
         color: red;
     }
 }
-#popupMessageBody, #popupMessageTitle, #commentDivInvisible, #btnDeleteUserConfirmed {
+#popupMessageBody, #popupMessageTitle, #commentDivInvisible, #btnDeleteUserConfirmed, #postIdDiv {
     display: none;
 }
+
+

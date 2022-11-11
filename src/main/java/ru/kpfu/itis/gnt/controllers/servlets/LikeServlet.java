@@ -5,6 +5,7 @@ import ru.kpfu.itis.gnt.DAO.implementations.*;
 import ru.kpfu.itis.gnt.Utils.RedirectHelper;
 import ru.kpfu.itis.gnt.constants.FieldsConstants;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
+import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 import ru.kpfu.itis.gnt.services.implementations.CommentsServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.LikesServiceImpl;
@@ -59,8 +60,8 @@ public class LikeServlet extends HttpServlet {
             likePost(resp, (ObjectMapper) getServletContext().getAttribute(ListenerConstants.KEY_OBJECT_MAPPER), req);
 
             // getServletContext().getRequestDispatcher("/WEB-INF/views/post.jsp").forward(req, resp);
-        } catch (Exception ex) {
-            RedirectHelper.forwardWithMessage(req, resp, "main",  ex.getMessage(), ex.getClass().getName());
+        } catch (EmptyResultDbException e) {
+            RedirectHelper.forwardWithMessage(req, resp, "admin", e.getMessage(), e.getClass().getName());
         }
     }
 

@@ -11,6 +11,7 @@ import ru.kpfu.itis.gnt.constants.PagePathConstants;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
+import ru.kpfu.itis.gnt.validators.ClassNameGetter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -76,7 +77,7 @@ public class CreatePostPage extends HttpServlet {
                 RedirectHelper.forwardWithMessage(req, resp, "create_post", errorMessage + "Some fields were empty", "Error");
             }
         } catch (DBException ex) {
-            RedirectHelper.forwardWithMessage(req, resp, "main", errorMessage + ex, ex.getClass().getName());
+            RedirectHelper.forwardWithMessage(req, resp, "main", errorMessage + ex, ClassNameGetter.getClassName(ex.getClass().getName()));
         }
     }
 

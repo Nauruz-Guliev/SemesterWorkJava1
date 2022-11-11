@@ -7,6 +7,7 @@ import ru.kpfu.itis.gnt.constants.PagePathConstants;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.implementations.UsersService;
+import ru.kpfu.itis.gnt.validators.ClassNameGetter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,7 +33,7 @@ public class AdminPage extends HttpServlet {
         try {
             updateTable(request);
         } catch (DBException ex) {
-            RedirectHelper.forwardWithMessage(request, resp, "/admin", ex.getMessage(), DBException.class.getName());
+            RedirectHelper.forwardWithMessage(request, resp, "admin", ex.getMessage(), ClassNameGetter.getClassName(ex.getClass().getName()));
         }
         getServletContext().getRequestDispatcher(PagePathConstants.ADMIN_PAGE_PATH).forward(request, resp);
     }
@@ -46,7 +47,7 @@ public class AdminPage extends HttpServlet {
             updateTable(request);
             RedirectHelper.forwardWithMessage(request, resp, "admin_page", "Country was changed!", "Success");
         } catch (NumberFormatException | DBException ex) {
-            RedirectHelper.forwardWithMessage(request, resp, "admin_page", ex.getMessage(), ex.getClass().getName());
+            RedirectHelper.forwardWithMessage(request, resp, "admin_page", ex.getMessage(), ClassNameGetter.getClassName(ex.getClass().getName()));
         }
     }
 
