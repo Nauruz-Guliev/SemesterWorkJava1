@@ -3,12 +3,18 @@ package ru.kpfu.itis.gnt.DAO.implementations;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
+import org.springframework.jdbc.core.simple.SimpleJdbcCallOperations;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import ru.kpfu.itis.gnt.DAO.PostsRepository;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.entities.User;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class PostsRepositoryImpl implements PostsRepository {
@@ -44,7 +50,7 @@ public class PostsRepositoryImpl implements PostsRepository {
         return jdbcTemplate.update(SQL_UPDATE_POST, post.getTitle(), post.getBody(), post.getId()) > 0;
     }
 
-    public Optional<List<Post>> findMostPopular(){
+    public Optional<List<Post>> findMostPopular() {
         return Optional.of(jdbcTemplate.query(SQL_GET_MOST_POPULAR_POSTS, postMapper));
     }
 
@@ -60,17 +66,22 @@ public class PostsRepositoryImpl implements PostsRepository {
 
 
     @Override
-    public boolean addPost(Post post) {
-        return jdbcTemplate.update(SQL_INSERT_POST, post.getTitle(), post.getBody(), post.getAuthor_id()) > 0;
+    public void addPost(Post post) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("title", post.getTitle());
+        params.put("post_body", post.getBody());
+        params.put("author_id", post.getAuthor_id());
+
+        SimpleJdbcInsert insert = new SimpleJdbcInsert(jdbcTemplate);
+        int id = insert.withTableName("posts")
+                .usingGeneratedKeyColumns("id")
+                .usingColumns("title", "post_body", "author_id")
+                .executeAndReturnKey(new MapSqlParameterSource(params)).intValue();
+        post.setId(id);
     }
 
 
-    public int findPostByBodyAndTitle(String body, String title) {
-        return jdbcTemplate.queryForObject(SQL_GET_POST_ID_BY_BODY_AND_TITLE,
-                new Object[]{body, title},
-                Integer.class
-        );
-    }
+
 
 
     private final RowMapper<Post> postMapper =

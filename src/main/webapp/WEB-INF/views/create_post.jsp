@@ -5,6 +5,10 @@
 <%@include file="/WEB-INF/views/_header.jsp" %>
 
 
+<script src="${pageContext.request.contextPath}/js/tag.js"></script>
+
+
+
 <div id="article-div" class="card m-4">
     <form action="<c:url value="/post/create"/>" method="POST">
         <div id="create-article" class="card-body m-2">

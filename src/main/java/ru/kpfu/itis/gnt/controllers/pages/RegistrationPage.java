@@ -42,7 +42,6 @@ public class RegistrationPage extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RedirectHelper.showExistingPopupMessage(resp, req);
         getServletContext().getRequestDispatcher("/WEB-INF/views/register.jsp").forward(req, resp);
     }
 
@@ -51,12 +50,15 @@ public class RegistrationPage extends HttpServlet {
         try {
             initValues(request);
             if(usersService.signUp(firstName, lastName, email, password, passwordConfirm, gender, dateOfBirth, country, policeAgreement)){
-                RedirectHelper.redirect(request, response, "/signin", "Registered successfully!");
+
+                RedirectHelper.forwardWithMessage(request, response, "signin",  "Registered successfully", "Success");
+
             } else {
-                RedirectHelper.redirect(request, response, "/register", "Couldn't register");
+                RedirectHelper.forwardWithMessage(request, response, "signin",  "Couldn't register", "Error");
             }
         } catch (DBException | RegistrationException ex) {
-            RedirectHelper.redirect(request, response, "/signin", ex.getMessage());
+            RedirectHelper.forwardWithMessage(request, response, "signin",  ex.getMessage(), ex.getClass().getName());
+
         }
     }
 

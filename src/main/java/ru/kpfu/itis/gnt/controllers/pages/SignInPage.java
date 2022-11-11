@@ -31,7 +31,6 @@ public class SignInPage extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RedirectHelper.showExistingPopupMessage(resp, req);
         getServletContext().getRequestDispatcher("/WEB-INF/views/signin.jsp").forward(req, resp);
     }
 
@@ -46,7 +45,7 @@ public class SignInPage extends HttpServlet {
                 resp.sendRedirect(getServletContext().getContextPath() + PathsConstants.PROFILE_MAIN_PAGE_PATH);
             }
         } catch (DBException e) {
-            RedirectHelper.redirect(req, resp,"/signin", e.getMessage());
+            RedirectHelper.forwardWithMessage(req, resp, "/main",  e.getMessage(), e.getClass().getName());
         }
         req.setAttribute("errorMessage", "Wrong email or password");
         req.setAttribute("email", req.getParameter("email"));

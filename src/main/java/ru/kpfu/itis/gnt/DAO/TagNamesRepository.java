@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface TagNamesRepository {
     boolean addNewTagName(String tagName);
     Optional<TagName> findTagNameById(int tag_id);
-    Optional<TagName> findTagNameByName(String tag_id);
+    Optional<Integer> findTagNameByName(String tag_id);
 
 }

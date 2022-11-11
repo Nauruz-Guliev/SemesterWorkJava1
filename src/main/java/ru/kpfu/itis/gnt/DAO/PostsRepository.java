@@ -9,5 +9,5 @@ public interface PostsRepository {
     Optional<List<Post>> findPosts(int limit, int offset);
     Optional<Post> findPostById(int postId);
     boolean updatePost(Post post);
-    boolean addPost(Post post);
+    void addPost(Post post);
 }

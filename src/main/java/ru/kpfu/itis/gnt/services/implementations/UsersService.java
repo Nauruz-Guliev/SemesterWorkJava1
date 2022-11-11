@@ -43,7 +43,7 @@ public class UsersService implements ru.kpfu.itis.gnt.services.UsersService {
     }
 
     @Override
-    public void updateUser(User user) throws DBException {
+    public void updateUser(User user) throws DBException, IOException {
         checkUser(user, true, "", "");
         if (!userDAO.updateUser(user)) {
             throw new DBException("Couldn't update user");
@@ -83,11 +83,19 @@ public class UsersService implements ru.kpfu.itis.gnt.services.UsersService {
         return true;
     }
 
-    private void checkUser(User user, Boolean isUpdating, String passwordConfirm, String policyAgreement) {
+    private void checkUser(User user, Boolean isUpdating, String passwordConfirm, String policyAgreement) throws IOException {
         if (isUpdating) {
             userValidator = new RegistrationFieldsValidator(user.getFirstName(), user.getLastName(), user.getEmail(), user.getGender(), user.getDateOfBirth(), user.getCountry());
         } else {
-            userValidator = new RegistrationFieldsValidator(user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword(), passwordConfirm, user.getGender(), user.getDateOfBirth(), user.getCountry(), policyAgreement);
+            userValidator = new RegistrationFieldsValidator(user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getPassword(),
+                    Encrypter.md5Hex(passwordConfirm),
+                    user.getGender(),
+                    user.getDateOfBirth(),
+                    user.getCountry(),
+                    policyAgreement);
         }
         errorList = userValidator.getErrorList();
     }

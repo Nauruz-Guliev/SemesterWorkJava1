@@ -4,6 +4,10 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="/WEB-INF/views/_header.jsp" %>
 
+<script src="${pageContext.request.contextPath}/js/like.js"></script>
+<script src="${pageContext.request.contextPath}/js/comment.js"></script>
+
+
 <div id="article-div" class="card m-4">
 
     <div class="card-body m-2">
@@ -16,6 +20,12 @@
             <p class="card-text p-2">
                 <c:out value="${post.body}"/>
             </p>
+            <c:if test="${not empty postTags}">
+                <c:forEach var="post" items="${postTags}">
+                    <li><a class="link-primary">${post.name}</a></li>
+
+                </c:forEach>
+            </c:if>
 
 
             <c:if test="${not empty email}">
@@ -52,15 +62,16 @@
 
     </c:if>
 
+
     <c:if test="${empty user}">
         <div class="card-body p-2 m-3">
             <p>In order to comment you need to <a href="<c:url value="/signin"/>">sign in</a>. </p>
         </div>
     </c:if>
 
+    <div id="commentDiv" class="commentDiv">
+        <c:forEach var="entry" items="${commentAuthors}">
 
-    <c:forEach var="entry" items="${commentAuthors}">
-        <div id="commentDiv" class="commentDiv">
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="d-flex flex-start">
@@ -75,17 +86,19 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="small mb-0" style="color: #aaa;"></p>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </c:forEach>
+
+        </c:forEach>
+    </div>
 
 
     <nav aria-label="Page navigation example">
         <ul class="pagination">
-            <c:forEach begin="0" end="${commentCount+1}" var="i" step="10">
+            <c:forEach begin="0" end="${commentCount}" var="i" step="10">
 
                 <li class="page-item"><a class="page-link"
                                          href="${pageContext.request.contextPath}/article?postIndex=${post.id}&offset=${i}">
@@ -97,6 +110,32 @@
 
         </ul>
     </nav>
+
+
+    <!-- this is invisible by default. Used to for js so that it has something to copy. !-->
+    <div id="commentDivInvisible" class="commentDivInvisible">
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex flex-start">
+                    <div class="w-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="text-primary fw-bold mb-0">
+
+                            </h6>
+                            <p class="mb-0"></p>
+                        </div>
+                        <span class="text-dark ms-2 m-2">$</span>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="small mb-0"></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 
 <%@include file="/WEB-INF/views/_footer.jsp" %>

@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 </head>
 <body>
+<div id="popupMessageBody">${popupMessageBody}</div>
+<div id="popupMessageTitle">${popupMessageTitle}</div>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <div class="container-fluid">
@@ -39,7 +41,6 @@
                     <li class="nav-item"><a class="nav-link" href="<c:url value="/post/create"/>">Create post</a>
                     </li>
                 </c:if>
-
 
 
             </ul>

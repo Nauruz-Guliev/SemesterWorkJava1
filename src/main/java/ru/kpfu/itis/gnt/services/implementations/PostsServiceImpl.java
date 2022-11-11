@@ -58,13 +58,14 @@ public class PostsServiceImpl implements PostsService {
         } else {
             return false;
         }
-        int postId = postsDao.findPostByBodyAndTitle(post.getBody(), post.getTitle());
+
+        int postId = post.getId();
         if (postId > 0) {
             for (String tagName : tagNames) {
-                int tagId = (tagNamesDao.findTagNameByName(tagName).isPresent())
-                        ? tagNamesDao.findTagNameByName(tagName).get().getId() : -1;
-                if (tagId < 0) {
+                int tagId = tagNamesDao.findTagNameByName(tagName).get();
+                if (tagId <= 0) {
                     tagNamesDao.addNewTagName(tagName);
+                    tagId = tagNamesDao.findTagNameByName(tagName).get();
                 }
                 tagsDao.addTag(postId, tagId);
             }

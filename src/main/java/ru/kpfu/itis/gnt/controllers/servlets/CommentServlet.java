@@ -2,6 +2,7 @@ package ru.kpfu.itis.gnt.controllers.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.kpfu.itis.gnt.DAO.implementations.*;
+import ru.kpfu.itis.gnt.Utils.RedirectHelper;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.Comment;
 import ru.kpfu.itis.gnt.entities.CommentObject;
@@ -12,6 +13,7 @@ import ru.kpfu.itis.gnt.services.implementations.CommentsServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.UsersService;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -60,12 +62,12 @@ public class CommentServlet extends HttpServlet {
         try {
             initValues(req);
             addCommentToDB(resp, (ObjectMapper) getServletContext().getAttribute(ListenerConstants.KEY_OBJECT_MAPPER), req);
-        } catch (NumberFormatException | DBException e) {
+        } catch (NumberFormatException | DBException | IOException | ServletException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void addCommentToDB(HttpServletResponse resp, ObjectMapper objectMapper, HttpServletRequest req) {
+    private void addCommentToDB(HttpServletResponse resp, ObjectMapper objectMapper, HttpServletRequest req) throws IOException, ServletException {
 
         try {
             Comment commentServletToDb = new Comment(
@@ -95,7 +97,7 @@ public class CommentServlet extends HttpServlet {
                 resp.getWriter().write(jsonResponse);
             }
         } catch (IOException | DBException | NumberFormatException ex) {
-            System.out.println(ex);
+            RedirectHelper.forwardWithMessage(req, resp, "main",  ex.getMessage(), ex.getClass().getName());
         }
     }
 

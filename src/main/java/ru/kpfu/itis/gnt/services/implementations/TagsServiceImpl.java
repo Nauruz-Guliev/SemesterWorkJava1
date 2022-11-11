@@ -28,6 +28,7 @@ public class TagsServiceImpl implements TagsService {
     public List<Tag> findAllTags(int postId) throws DBException {
         try {
             List<Tag> tags = tagsDao.findAllTags(postId).get();
+            System.out.println(tags + " " + postId);
             for (Tag tag : tags) {
                 tag.setName(
                         tagNamesDao.findTagNameById(tag.getTag_name_id()).get().getName()

@@ -6,3 +6,6 @@
         color: red;
     }
 }
+#popupMessageBody, #popupMessageTitle, #commentDivInvisible {
+    display: none;
+}

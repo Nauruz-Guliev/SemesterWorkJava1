@@ -11,5 +11,5 @@ public interface UsersService {
     void signIn(HttpServletRequest req, String email,String password) throws DBException;
     void signOut(HttpServletRequest req);
     boolean signUp(String firstName, String lastName, String email, String password, String passwordConfirm, String gender, String dateOfBirth, String country, String policyAgreement) throws DBException, RegistrationException, IOException;
-    void updateUser(User user) throws DBException;
+    void updateUser(User user) throws DBException, IOException;
 }

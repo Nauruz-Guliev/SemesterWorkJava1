@@ -41,20 +41,19 @@ public class ProfilePage extends HttpServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        RedirectHelper.showExistingPopupMessage(resp, req);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
             initValues(req, resp);
             req.setAttribute(FieldsConstants.FIELD_USER, user);
             getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(req, resp);
 
         } catch (ServletException | DBException | IOException ex) {
-            RedirectHelper.redirect(req, resp, "/profile/general", ex.getMessage());
+            RedirectHelper.forwardWithMessage(req, resp, "profile",  ex.getMessage(), ex.getClass().getName());
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
             initAttributes(req);
             updatedUser = new User(
@@ -68,9 +67,9 @@ public class ProfilePage extends HttpServlet {
             updatedUser.setId(userId);
             usersService.updateUser(updatedUser);
             req.setAttribute(FieldsConstants.FIELD_USER, usersService.findUserById(userId));
-            RedirectHelper.redirect(req, resp, "/profile/general", "ProfilePage was updated successfully");
-        } catch (DBException | NumberFormatException | IOException ex) {
-            RedirectHelper.redirect(req, resp, "/profile/general", ex.getMessage());
+            RedirectHelper.forwardWithMessage(req, resp, "profile",  "Profile was updated", "Success");
+        } catch (DBException | NumberFormatException | IOException | ServletException ex) {
+            RedirectHelper.forwardWithMessage(req, resp, "profile",  ex.getMessage(), ex.getClass().getName());
         }
     }
 

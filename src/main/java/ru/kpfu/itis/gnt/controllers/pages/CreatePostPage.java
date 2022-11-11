@@ -52,7 +52,6 @@ public class CreatePostPage extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RedirectHelper.showExistingPopupMessage(resp, req);
         getServletContext().getRequestDispatcher(PagePathConstants.CREATE_POST_PAGE_PATH).forward(req, resp);
     }
 
@@ -68,12 +67,12 @@ public class CreatePostPage extends HttpServlet {
             initValues(req);
             Post post = new Post(postTitle, postBody, (Integer) req.getSession().getAttribute("USER_ID"));
             if (postsService.addPost(post, postTags)) {
-                RedirectHelper.redirect(req, resp, "/post/create", successMessage);
+                RedirectHelper.forwardWithMessage(req, resp, "main", successMessage, "Success");
             } else {
-                RedirectHelper.redirect(req, resp, "/post/create", errorMessage + "Some fields were empty");
+                RedirectHelper.forwardWithMessage(req, resp, "create_post", errorMessage + "Some fields were empty", "Error");
             }
         } catch (DBException ex) {
-            RedirectHelper.redirect(req, resp, "/post/create", errorMessage + ex);
+            RedirectHelper.forwardWithMessage(req, resp, "main", errorMessage + ex, ex.getClass().getName());
         }
     }
 

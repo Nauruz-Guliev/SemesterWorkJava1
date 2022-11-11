@@ -29,11 +29,10 @@ public class AdminPage extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-        RedirectHelper.showExistingPopupMessage(resp, request);
         try {
             updateTable(request);
         } catch (DBException ex) {
-            RedirectHelper.redirect(request, resp, "/admin", ex.getMessage());
+            RedirectHelper.forwardWithMessage(request, resp, "/admin", ex.getMessage(), DBException.class.getName());
         }
         getServletContext().getRequestDispatcher(PagePathConstants.ADMIN_PAGE_PATH).forward(request, resp);
     }
@@ -45,9 +44,9 @@ public class AdminPage extends HttpServlet {
             String newCountry = request.getParameter("country");
             usersService.updateCountry(newCountry, id);
             updateTable(request);
-            RedirectHelper.redirect(request, resp, "admin", "Country was changed");
+            RedirectHelper.forwardWithMessage(request, resp, "admin_page", "Country was changed!", "Success");
         } catch (NumberFormatException | DBException ex) {
-            RedirectHelper.redirect(request, resp, "/admin", ex.getMessage());
+            RedirectHelper.forwardWithMessage(request, resp, "admin_page", ex.getMessage(), ex.getClass().getName());
         }
     }
 

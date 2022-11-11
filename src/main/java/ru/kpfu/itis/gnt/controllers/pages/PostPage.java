@@ -70,7 +70,6 @@ public class PostPage extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            RedirectHelper.showExistingPopupMessage(resp, req);
             String offset = req.getParameter("offset");
             if (offset != null) {
                 commentOffset = Integer.parseInt(offset);
@@ -84,11 +83,12 @@ public class PostPage extends HttpServlet {
             isLiked = likesService.isPostLikedByUser(postId, userId);
             likeCount = likesService.countPostLikes(postId);
             initValues();
-            System.out.println(postTags);
+            System.out.println("asdasd" + postTags);
             setAttributes(req);
             getServletContext().getRequestDispatcher("/WEB-INF/views/post.jsp").forward(req, resp);
         } catch (ParseException | ServletException | IOException | NumberFormatException | DBException ex) {
-            RedirectHelper.redirect(req, resp, "/post", ex.getMessage());
+          //  RedirectHelper.redirect(req, resp, "/post", ex.getMessage());
+            RedirectHelper.forwardWithMessage(req, resp, "main",  ex.getMessage(), ex.getClass().getName());
         }
     }
 
@@ -102,6 +102,7 @@ public class PostPage extends HttpServlet {
     }
 
     private void setAttributes(HttpServletRequest req) {
+        req.setAttribute("postTags", postTags);
         req.setAttribute("isLiked", isLiked);
         req.setAttribute("post", post);
         req.setAttribute("postAuthor", postAuthor);

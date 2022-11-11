@@ -1,5 +1,6 @@
 package ru.kpfu.itis.gnt.DAO.implementations;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import ru.kpfu.itis.gnt.DAO.TagNamesRepository;
@@ -17,7 +18,7 @@ public class TagNamesRepositoryImpl implements TagNamesRepository {
     private final static String SQL_FIND_TAG_NAME_BY_ID = "SELECT * from tag_names where id=?";
 
     //language=SQL
-    private final static String SQL_FIND_TAG_NAME_BY_NAME = "SELECT * from tag_names where name=?";
+    private final static String SQL_FIND_TAG_NAME_BY_NAME = "SELECT id from tag_names where name=?";
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -43,14 +44,16 @@ public class TagNamesRepositoryImpl implements TagNamesRepository {
     }
 
     @Override
-    public Optional<TagName> findTagNameByName(String tagName) {
-        return Optional.ofNullable(
-                jdbcTemplate.queryForObject(
-                        SQL_FIND_TAG_NAME_BY_NAME,
-                        new Object[]{tagName},
-                        tagNameRowMapper
-                )
-        );
+    public Optional<Integer> findTagNameByName(String tagName) {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(
+                    SQL_FIND_TAG_NAME_BY_NAME,
+                    new Object[]{tagName},
+                    Integer.class
+            ));
+        } catch (EmptyResultDataAccessException ex) {
+            return Optional.of(0);
+        }
     }
 
     private final RowMapper<TagName> tagNameRowMapper =

@@ -26,26 +26,30 @@ public class MainPage extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RedirectHelper.showExistingPopupMessage(resp, req);
-        getPosts(10, 0, resp);
-        req.setAttribute("email", req.getSession().getAttribute("email"));
-        req.setAttribute("postsList", postList);
-        req.setAttribute("mostPopular", mostPopular);
+        try {
+            getPosts(10, 0, resp);
+            req.setAttribute("email", req.getSession().getAttribute("email"));
+            req.setAttribute("postsList", postList);
+            req.setAttribute("mostPopular", mostPopular);
 
-        getServletContext().getRequestDispatcher("/WEB-INF/views/main.jsp").forward(req, resp);
+            getServletContext().getRequestDispatcher("/WEB-INF/views/main.jsp").forward(req, resp);
+        } catch (DBException e) {
+            RedirectHelper.forwardWithMessage(req, resp, "/main",  e.getMessage(), e.getClass().getName());
+        }
     }
 
 
-    private void getPosts(int limit, int offset, HttpServletResponse response) {
+    private void getPosts(int limit, int offset, HttpServletResponse response) throws DBException {
         PostsServiceImpl postsService = new PostsServiceImpl(
                 (PostsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_POSTS_DAO),
                 (UsersRepositoryJDBCTemplateImpl) getServletContext().getAttribute(ListenerConstants.KEY_USER_DAO),
                 (TagsRepositoryImpl) getServletContext().getAttribute(ListenerConstants.KEY_TAGS_DAO),
                 (TagNamesRepository) getServletContext().getAttribute(ListenerConstants.KEY_TAG_NAME_DAO));
-        try {
-            postList = postsService.getPosts(limit, offset);
-            mostPopular = postsService.getMostPopularPosts();
-        } catch (DBException e) {
-        }
+
+        postList = postsService.getPosts(limit, offset);
+        mostPopular = postsService.getMostPopularPosts();
+
+
+
     }
 }

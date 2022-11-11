@@ -2,6 +2,7 @@ package ru.kpfu.itis.gnt.controllers.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.kpfu.itis.gnt.DAO.implementations.*;
+import ru.kpfu.itis.gnt.Utils.RedirectHelper;
 import ru.kpfu.itis.gnt.constants.FieldsConstants;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.services.implementations.CommentsServiceImpl;
@@ -58,13 +59,12 @@ public class LikeServlet extends HttpServlet {
 
             // getServletContext().getRequestDispatcher("/WEB-INF/views/post.jsp").forward(req, resp);
         } catch (Exception ex) {
-            System.out.println("asdasd" + ex);
+            RedirectHelper.forwardWithMessage(req, resp, "main",  ex.getMessage(), ex.getClass().getName());
         }
     }
 
     private void likePost(HttpServletResponse resp, ObjectMapper objectMapper, HttpServletRequest req) throws IOException {
         initValues(req);
-        System.out.println("SASA" + postId + " " + userId);
         likesService.likePost(postId, userId);
         postLikeCount = likesService.countPostLikes(postId);
         String jsonResponse = objectMapper.writeValueAsString(postLikeCount);

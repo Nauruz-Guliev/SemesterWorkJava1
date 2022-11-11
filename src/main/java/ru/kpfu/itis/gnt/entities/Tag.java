@@ -40,6 +40,16 @@ public class Tag {
         return tag_name_id;
     }
 
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "id=" + id +
+                ", post_id=" + post_id +
+                ", tag_name_id=" + tag_name_id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
     public void setTag_name_id(int tag_name_id) {
         this.tag_name_id = tag_name_id;
     }
