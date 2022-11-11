@@ -1,5 +1,6 @@
 package ru.kpfu.itis.gnt.DAO.datasource;
 
+import org.postgresql.jdbc2.optional.SimpleDataSource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import java.io.IOException;
@@ -14,8 +15,9 @@ public class DataSource{
     public DriverManagerDataSource getDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         Properties properties = new Properties();
-        try (InputStream in = Files.newInputStream(Paths.get("C:\\Windows.old\\Users\\nauru\\Desktop\\java\\java3-examples\\hwServlets\\src\\main\\properties\\db.properties"))) {
-            properties.load(in);
+
+        try {
+            properties.load(SimpleDataSource.class.getResourceAsStream("/application.properties"));
             dataSource.setDriverClassName(driverClassName);
             dataSource.setUrl(properties.getProperty("db.url"));
             dataSource.setUsername(properties.getProperty("db.username"));
@@ -31,7 +33,7 @@ public class DataSource{
     public Connection getPostgresDbConnection() throws DBException {
         Properties properties = new Properties();
         try {
-            properties.load(Files.newInputStream(Paths.get("C:\\Windows.old\\Users\\nauru\\Desktop\\java\\java3-examples\\hwServlets\\src\\main\\properties\\db.properties")));
+            properties.load(Files.newInputStream(Paths.get("C:\\Windows.old\\Users\\nauru\\Desktop\\java\\java3-examples\\hwServlets\\src\\main\\properties\\application.properties")));
             Class.forName("org.postgresql.Driver");
             if (connection == null) {
                 Class.forName("org.postgresql.Driver");
