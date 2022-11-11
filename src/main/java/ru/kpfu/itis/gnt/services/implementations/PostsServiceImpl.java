@@ -58,7 +58,6 @@ public class PostsServiceImpl implements PostsService {
         } else {
             return false;
         }
-
         int postId = post.getId();
         if (postId > 0) {
             for (String tagName : tagNames) {
@@ -69,10 +68,16 @@ public class PostsServiceImpl implements PostsService {
                 }
                 tagsDao.addTag(postId, tagId);
             }
+            return true;
         } else {
             throw new DBException("Added post was not found");
         }
-        return true;
+    }
+
+    public List<Post> findPostsByTag(int tagId) throws DBException {
+        return postsDao.getPostsByTagId(tagId).orElseThrow(
+                () -> new DBException("Posts were not found")
+        );
     }
 
     @Override

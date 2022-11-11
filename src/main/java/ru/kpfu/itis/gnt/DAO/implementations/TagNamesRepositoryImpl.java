@@ -1,10 +1,12 @@
 package ru.kpfu.itis.gnt.DAO.implementations;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import ru.kpfu.itis.gnt.DAO.TagNamesRepository;
 import ru.kpfu.itis.gnt.entities.TagName;
+import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 
 import javax.sql.DataSource;
 import java.util.Optional;
@@ -29,18 +31,28 @@ public class TagNamesRepositoryImpl implements TagNamesRepository {
 
     @Override
     public boolean addNewTagName(String tagName) {
-        return jdbcTemplate.update(SQL_INSERT_TAG_NAME, tagName) > 0;
+        try {
+            jdbcTemplate.update(SQL_INSERT_TAG_NAME, tagName);
+            return true;
+        } catch (DuplicateKeyException ex) {
+            //ограничение на уникальность. Если такое имя есть, значит его больше добавить не можем
+            return false;
+        }
     }
 
     @Override
-    public Optional<TagName> findTagNameById(int tag_id) {
-        return Optional.ofNullable(
-                jdbcTemplate.queryForObject(
-                        SQL_FIND_TAG_NAME_BY_ID,
-                        new Object[]{tag_id},
-                        tagNameRowMapper
-                )
-        );
+    public Optional<TagName> findTagNameById(int tag_id) throws EmptyResultDbException {
+        try {
+            return Optional.ofNullable(
+                    jdbcTemplate.queryForObject(
+                            SQL_FIND_TAG_NAME_BY_ID,
+                            new Object[]{tag_id},
+                            tagNameRowMapper
+                    )
+            );
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EmptyResultDbException("Couldn't find tag name");
+        }
     }
 
     @Override
@@ -52,6 +64,7 @@ public class TagNamesRepositoryImpl implements TagNamesRepository {
                     Integer.class
             ));
         } catch (EmptyResultDataAccessException ex) {
+            //обрабатывается в сервисе
             return Optional.of(0);
         }
     }

@@ -2,6 +2,7 @@ package ru.kpfu.itis.gnt.services;
 
 
 import ru.kpfu.itis.gnt.exceptions.DBException;
+import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 
 public interface LikesService {
 
@@ -9,5 +10,5 @@ public interface LikesService {
 
     boolean likePost(int post_id, int user_id);
 
-    int countPostLikes(int post_id);
+    int countPostLikes(int post_id) throws EmptyResultDbException;
 }

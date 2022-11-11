@@ -14,6 +14,7 @@ import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -64,10 +65,13 @@ public class CreatePostPage extends HttpServlet {
                     postTags.add(tag);
                 }
             }
+            System.out.println("TAGS "+ postTags);
             initValues(req);
             Post post = new Post(postTitle, postBody, (Integer) req.getSession().getAttribute("USER_ID"));
             if (postsService.addPost(post, postTags)) {
-                RedirectHelper.forwardWithMessage(req, resp, "main", successMessage, "Success");
+                req.setAttribute("popupMessageBody", "success");
+                req.setAttribute("popupMessageTitle", "success");
+                resp.sendRedirect(req.getContextPath() + "/main");
             } else {
                 RedirectHelper.forwardWithMessage(req, resp, "create_post", errorMessage + "Some fields were empty", "Error");
             }

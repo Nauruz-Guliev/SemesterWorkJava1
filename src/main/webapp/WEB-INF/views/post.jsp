@@ -21,9 +21,11 @@
                 <c:out value="${post.body}"/>
             </p>
             <c:if test="${not empty postTags}">
-                <c:forEach var="post" items="${postTags}">
-                    <li><a class="link-primary">${post.name}</a></li>
-
+                <c:forEach var="tag" items="${postTags}">
+                    ${tag}
+                    <li><a class="link-primary"
+                    href="<c:url value="/main?tagId=${tag.tag_name_id}"/>"
+                    >${tag.name}</a></li>
                 </c:forEach>
             </c:if>
 
@@ -78,11 +80,11 @@
                         <div class="w-100">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h6 class="text-primary fw-bold mb-0">
-                                        ${entry.value.firstName} ${entry.value.lastName}
+                                        ${entry.key.firstName} ${entry.key.lastName}
                                 </h6>
-                                <p class="mb-0">${entry.key.created_at}</p>
+                                <p class="mb-0">${entry.value.created_at}</p>
                             </div>
-                            <span class="text-dark ms-2 m-2">${entry.key.text}</span>
+                            <span class="text-dark ms-2 m-2">${entry.value.text}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="small mb-0" style="color: #aaa;"></p>
                             </div>
@@ -96,8 +98,8 @@
     </div>
 
 
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
+    <nav>
+        <ul class="pagination m-4">
             <c:forEach begin="0" end="${commentCount}" var="i" step="10">
 
                 <li class="page-item"><a class="page-link"
@@ -112,7 +114,7 @@
     </nav>
 
 
-    <!-- this is invisible by default. Used to for js so that it has something to copy. !-->
+    <!-- this is invisible by default. Used  for js so that it has something to copy. !-->
     <div id="commentDivInvisible" class="commentDivInvisible">
         <div class="card mb-3">
             <div class="card-body">

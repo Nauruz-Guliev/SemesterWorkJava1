@@ -6,6 +6,6 @@
         color: red;
     }
 }
-#popupMessageBody, #popupMessageTitle, #commentDivInvisible {
+#popupMessageBody, #popupMessageTitle, #commentDivInvisible, #btnDeleteUserConfirmed {
     display: none;
 }

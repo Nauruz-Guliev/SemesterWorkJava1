@@ -24,12 +24,9 @@ public class FieldsConstants {
     public static final String DATE_OF_BIRTH_FIELD_PARAMETER = "date-of-birth";
     public static final String POLICY_AGREEMENT_FIELD_PARAMETER = "policy-agreement";
 
-
     public static final String LIKE_COUNT_ATTRIBUTE = "likeCount";
 
-
     public static final String COOKIE_MESSAGE_CONSTANT = "message-cookie";
-
 
 
 }

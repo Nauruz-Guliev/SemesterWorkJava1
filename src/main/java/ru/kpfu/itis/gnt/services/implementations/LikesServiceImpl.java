@@ -5,6 +5,7 @@ import ru.kpfu.itis.gnt.DAO.implementations.LikesRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.exceptions.DBException;
+import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 import ru.kpfu.itis.gnt.services.LikesService;
 
 
@@ -45,7 +46,7 @@ public class LikesServiceImpl implements LikesService {
     }
 
     @Override
-    public int countPostLikes(int post_id) {
+    public int countPostLikes(int post_id) throws EmptyResultDbException {
         return likesDao.countPostLike(post_id);
     }
 

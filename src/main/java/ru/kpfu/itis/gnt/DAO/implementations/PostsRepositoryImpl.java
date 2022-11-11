@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import ru.kpfu.itis.gnt.DAO.PostsRepository;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.entities.User;
+import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class PostsRepositoryImpl implements PostsRepository {
     private final static String SQL_GET_POST_BY_ID = "SELECT * from posts where id = ?";
 
     //language=SQL
-    private final static String SQL_GET_POST_ID_BY_BODY_AND_TITLE = "SELECT id from posts where post_body=? and title=? LIMIT 1";
+    private final static String SQL_GET_ALL_POSTS_BY_TAG_ID = "SELECT p.* from posts p join post_tags pt on pt.post_id = p.id where tag_name_id = ?";
     //language=SQL
     private final static String SQL_UPDATE_POST = "UPDATE posts SET title=?, post_body =?, edited_at = current_timestamp where id = ?";
 
@@ -50,18 +51,38 @@ public class PostsRepositoryImpl implements PostsRepository {
         return jdbcTemplate.update(SQL_UPDATE_POST, post.getTitle(), post.getBody(), post.getId()) > 0;
     }
 
-    public Optional<List<Post>> findMostPopular() {
-        return Optional.of(jdbcTemplate.query(SQL_GET_MOST_POPULAR_POSTS, postMapper));
+    public Optional<List<Post>> findMostPopular() throws EmptyResultDbException {
+        try {
+            return Optional.of(jdbcTemplate.query(SQL_GET_MOST_POPULAR_POSTS, postMapper));
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EmptyResultDbException("Most popular posts were not found");
+        }
     }
 
     @Override
-    public Optional<List<Post>> findPosts(int limit, int offset) {
-        return Optional.of(jdbcTemplate.query(SQL_GET_ALL_POSTS, postMapper, limit, offset));
+    public Optional<List<Post>> findPosts(int limit, int offset) throws EmptyResultDbException {
+        try {
+            return Optional.of(jdbcTemplate.query(SQL_GET_ALL_POSTS, postMapper, limit, offset));
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EmptyResultDbException("Posts were not found");
+        }
+    }
+
+    public Optional<List<Post>> getPostsByTagId(int tagId) throws EmptyResultDbException {
+        try {
+            return Optional.of(jdbcTemplate.query(SQL_GET_ALL_POSTS_BY_TAG_ID, postMapper, tagId));
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EmptyResultDbException("Tag was not found");
+        }
     }
 
     @Override
-    public Optional<Post> findPostById(int postId) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_GET_POST_BY_ID, new Object[]{postId}, postMapper));
+    public Optional<Post> findPostById(int postId) throws EmptyResultDbException {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_GET_POST_BY_ID, new Object[]{postId}, postMapper));
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EmptyResultDbException("Post was not found");
+        }
     }
 
 
@@ -79,9 +100,6 @@ public class PostsRepositoryImpl implements PostsRepository {
                 .executeAndReturnKey(new MapSqlParameterSource(params)).intValue();
         post.setId(id);
     }
-
-
-
 
 
     private final RowMapper<Post> postMapper =

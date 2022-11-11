@@ -4,8 +4,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.Utils.Encrypter;
 import ru.kpfu.itis.gnt.entities.User;
-import ru.kpfu.itis.gnt.exceptions.DBException;
-import ru.kpfu.itis.gnt.exceptions.RegistrationException;
+import ru.kpfu.itis.gnt.exceptions.*;
 import ru.kpfu.itis.gnt.validators.RegistrationFieldsValidator;
 
 import java.io.IOException;
@@ -131,6 +130,18 @@ public class UsersService implements ru.kpfu.itis.gnt.services.UsersService {
 
     public User findUserById(int userId) throws DBException {
         return userDAO.findById(userId).orElseThrow(() -> new DBException("User was not found"));
+    }
+
+    public boolean updateUserSecurityInformation(int userId, String email, String password, String passwordConfirm, String oldPassword) throws EmptyResultDbException, AuthenticationException, ValidationException, IOException {
+        if (userDAO.findUser(email, Encrypter.md5Hex(oldPassword)).isPresent()) {
+            if (new RegistrationFieldsValidator(password, passwordConfirm).validateSecurityInfo()) {
+                return userDAO.updateSecurity(userId, Encrypter.md5Hex(password));
+            } else {
+                throw new ValidationException("Invalid passwords");
+            }
+        } else {
+            throw new AuthenticationException("Wrong password");
+        }
     }
 
 }

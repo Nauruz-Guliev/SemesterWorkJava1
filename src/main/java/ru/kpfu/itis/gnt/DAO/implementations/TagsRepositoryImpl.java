@@ -31,11 +31,16 @@ public class TagsRepositoryImpl implements TagsRepository {
 
     @Override
     public boolean addTag(int postId, int tagNameId) throws DuplicateKeyException {
-        return jdbcTemplate.update(
-                SQL_INSERT_TAG,
-                tagNameId,
-                postId
-        ) > 0;
+        try {
+            return jdbcTemplate.update(
+                    SQL_INSERT_TAG,
+                    tagNameId,
+                    postId
+            ) > 0;
+        } catch (DuplicateKeyException ex) {
+            //нельзя один и тот же тэг добавить дважды, поэтому он просто не добавится
+            return false;
+        }
     }
 
     @Override
@@ -55,8 +60,8 @@ public class TagsRepositoryImpl implements TagsRepository {
     private final RowMapper<Tag> tagRowMapper =
             (row, rowNumber) -> {
                 Tag tag = new Tag(
-                        row.getInt("tag_name_id"),
-                        row.getInt("post_id")
+                        row.getInt("post_id"),
+                        row.getInt("tag_name_id")
                 );
                 tag.setId(row.getInt("id"));
                 return tag;

@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="/WEB-INF/views/_header.jsp" %>
 <%@taglib tagdir="/WEB-INF/tags" prefix="t" %>
+<script src="${pageContext.request.contextPath}/js/security.js"></script>
 
 <div class="container-xl px-4 mt-4">
   <!-- Account page navigation-->
@@ -43,7 +44,7 @@
         <div class="card-header">Delete Account</div>
         <div class="card-body">
           <p>Deleting your account is a permanent action and cannot be undone. If you are sure you want to delete your account, select the button below.</p>
-          <button onclick="showPopup()" class="btn btn-danger-soft text-danger" type="button">I understand, delete my account</button>
+          <button id="btnDeleteUser" class="btn btn-danger-soft text-danger" type="button">I understand, delete my account</button>
         </div>
       </div>
     </div>

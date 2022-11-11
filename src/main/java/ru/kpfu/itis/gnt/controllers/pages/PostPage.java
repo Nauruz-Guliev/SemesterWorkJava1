@@ -32,7 +32,7 @@ public class PostPage extends HttpServlet {
     private User postAuthor;
     private int likeCount;
 
-    private HashMap<Comment, User> commentAuthors;
+    private HashMap<User, Comment> commentAuthors;
 
     private PostsServiceImpl postsService;
     private CommentsServiceImpl commentsService;
@@ -86,9 +86,11 @@ public class PostPage extends HttpServlet {
             System.out.println("asdasd" + postTags);
             setAttributes(req);
             getServletContext().getRequestDispatcher("/WEB-INF/views/post.jsp").forward(req, resp);
-        } catch (ParseException | ServletException | IOException | NumberFormatException | DBException ex) {
-          //  RedirectHelper.redirect(req, resp, "/post", ex.getMessage());
-            RedirectHelper.forwardWithMessage(req, resp, "main",  ex.getMessage(), ex.getClass().getName());
+        } catch (ParseException | ServletException | IOException | DBException ex) {
+            //  RedirectHelper.redirect(req, resp, "/post", ex.getMessage());
+             RedirectHelper.forwardWithMessage(req, resp, "main",  ex.getMessage(), ex.getClass().getName());
+        } catch (NumberFormatException ex) {
+            resp.sendRedirect("/main");
         }
     }
 

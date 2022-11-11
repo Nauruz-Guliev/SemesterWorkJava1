@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import ru.kpfu.itis.gnt.DAO.CommentsRepository;
 import ru.kpfu.itis.gnt.entities.Comment;
+import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 
 import javax.xml.crypto.Data;
 import java.util.List;
@@ -37,18 +38,26 @@ public class CommentsRepositoryImpl implements CommentsRepository {
     }
 
     @Override
-    public Optional<List<Comment>> findComments(int postId, int limit, int offset) {
-        return Optional.of(jdbcTemplate.query(SQL_GET_ALL_COMMENTS,
-                new Object[]{postId, limit, offset},
-                commentRowMapper)
-        );
+    public Optional<List<Comment>> findComments(int postId, int limit, int offset) throws EmptyResultDbException {
+        try {
+            return Optional.of(jdbcTemplate.query(SQL_GET_ALL_COMMENTS,
+                    new Object[]{postId, limit, offset},
+                    commentRowMapper)
+            );
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EmptyResultDbException("Comment was not found");
+        }
     }
 
-    public Optional<Integer> getCommentCount(int post_id) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_COMMENT_COUNT,
-                new Object[]{post_id},
-                Integer.class
-        ));
+    public Optional<Integer> getCommentCount(int post_id) throws EmptyResultDbException {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_COMMENT_COUNT,
+                    new Object[]{post_id},
+                    Integer.class
+            ));
+        }  catch (EmptyResultDataAccessException ex) {
+            throw new EmptyResultDbException("Couldn't get comment count");
+        }
     }
 
 

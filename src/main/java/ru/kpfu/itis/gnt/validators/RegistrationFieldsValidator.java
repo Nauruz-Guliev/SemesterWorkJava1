@@ -49,6 +49,15 @@ public class RegistrationFieldsValidator {
         validateUpdateInputs();
     }
 
+    public RegistrationFieldsValidator(String newPassword, String newPasswordConfirm) {
+        this.password = newPassword;
+        this.passwordConfirm = newPasswordConfirm;
+    }
+    public boolean validateSecurityInfo(){
+        errorList = new ArrayList<>();
+        checkPassword();
+        return errorList.size() == 0;
+    }
 
     private void validateUpdateInputs(){
         checkFirstName();

@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import ru.kpfu.itis.gnt.DAO.UsersRepository;
 import ru.kpfu.itis.gnt.entities.User;
+import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -42,15 +43,31 @@ public class UsersRepositoryJDBCTemplateImpl implements UsersRepository {
     private static final String SQL_UPDATE_USER = "UPDATE users set firstname = ?, lastname = ?, email = ?, country = ?, gender = ?, dateofbirth = TO_DATE(?,'YYYY-MM-DD')" +
             "where id = ?";
 
+    //language=SQL
+    private static final String SQL_UPDATE_USER_PASSWORD = "UPDATE users set password = ? where id=?";
+
     public UsersRepositoryJDBCTemplateImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         // this.insert = new SimpleJdbcInsert(jdbcTemplate);
     }
 
 
+
     @Override
-    public Optional<List<User>> findAll() {
-        return Optional.of(jdbcTemplate.query(SQL_GET_ALL_USERS, userMapper));
+    public Optional<List<User>> findAll() throws EmptyResultDbException {
+        try {
+            return Optional.of(jdbcTemplate.query(SQL_GET_ALL_USERS, userMapper));
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EmptyResultDbException("No users found");
+        }
+    }
+
+    public boolean updateSecurity(int userId, String password){
+        return jdbcTemplate.update(
+                SQL_UPDATE_USER_PASSWORD,
+                password,
+                userId
+        ) > 0;
     }
 
     @Override
@@ -86,20 +103,29 @@ public class UsersRepositoryJDBCTemplateImpl implements UsersRepository {
         ) > 0;
     }
 
+
+
     @Override
     public boolean updateCountry(String country, int userId) {
         return jdbcTemplate.update(SQL_CHANGE_USER_COUNTRY, country, userId) > 0;
     }
 
     @Override
-    public Optional<User> findById(int id) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_GET_USER_BY_ID, new Object[]{id}, userMapper));
+    public Optional<User> findById(int id) throws EmptyResultDbException {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_GET_USER_BY_ID, new Object[]{id}, userMapper));
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EmptyResultDbException("Couldn't find such a user");
+        }
     }
 
     @Override
-    public Optional<User> findUser(String email, String password) {
-           return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_FIND_USER, new Object[]{email, password}, userMapper));
-
+    public Optional<User> findUser(String email, String password) throws EmptyResultDbException {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(SQL_FIND_USER, new Object[]{email, password}, userMapper));
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EmptyResultDbException("Couldn't find the user");
+        }
     }
 
     private final RowMapper<User> userMapper =

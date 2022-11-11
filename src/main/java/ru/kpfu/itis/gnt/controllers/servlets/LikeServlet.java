@@ -5,6 +5,7 @@ import ru.kpfu.itis.gnt.DAO.implementations.*;
 import ru.kpfu.itis.gnt.Utils.RedirectHelper;
 import ru.kpfu.itis.gnt.constants.FieldsConstants;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
+import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 import ru.kpfu.itis.gnt.services.implementations.CommentsServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.LikesServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
@@ -63,7 +64,7 @@ public class LikeServlet extends HttpServlet {
         }
     }
 
-    private void likePost(HttpServletResponse resp, ObjectMapper objectMapper, HttpServletRequest req) throws IOException {
+    private void likePost(HttpServletResponse resp, ObjectMapper objectMapper, HttpServletRequest req) throws IOException, EmptyResultDbException {
         initValues(req);
         likesService.likePost(postId, userId);
         postLikeCount = likesService.countPostLikes(postId);
@@ -77,10 +78,9 @@ public class LikeServlet extends HttpServlet {
         resp.sendRedirect(getServletContext().getContextPath() + "/");
     }
 
-    private void initValues(HttpServletRequest req) {
+    private void initValues(HttpServletRequest req) throws EmptyResultDbException {
         postId = Integer.parseInt(req.getParameter("postIndex"));
         userId = (int) req.getSession().getAttribute(FieldsConstants.USER_ID_ATTRIBUTE);
-
         postLikeCount = likesService.countPostLikes(postId);
     }
 }

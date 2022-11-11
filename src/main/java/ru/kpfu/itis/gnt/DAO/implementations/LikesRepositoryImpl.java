@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import ru.kpfu.itis.gnt.DAO.LikesRepository;
 import ru.kpfu.itis.gnt.entities.Like;
 import ru.kpfu.itis.gnt.entities.Post;
+import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Array;
@@ -82,20 +83,28 @@ public class LikesRepositoryImpl implements LikesRepository {
     }
 
     @Override
-    public int countCommentLike(int comment_id) throws NullPointerException {
-        return jdbcTemplate.queryForObject(SQL_FIND_COMMENT_COUNT,
-                new Object[]{comment_id},
-                Integer.class
-        );
+    public int countCommentLike(int comment_id) throws EmptyResultDbException {
+        try {
+            return jdbcTemplate.queryForObject(SQL_FIND_COMMENT_COUNT,
+                    new Object[]{comment_id},
+                    Integer.class
+            );
+        } catch (NullPointerException ex) {
+            throw new EmptyResultDbException("Couldn't count comment likes");
+        }
 
     }
 
     @Override
-    public int countPostLike(int post_id) throws NullPointerException {
-        return jdbcTemplate.queryForObject(SQL_FIND_POST_COUNT,
-                new Object[]{post_id},
-                Integer.class
-        );
+    public int countPostLike(int post_id) throws EmptyResultDbException {
+        try {
+            return jdbcTemplate.queryForObject(SQL_FIND_POST_COUNT,
+                    new Object[]{post_id},
+                    Integer.class
+            );
+        }  catch (NullPointerException ex) {
+            throw new EmptyResultDbException("Couldn't count post likes");
+        }
     }
 
     private final RowMapper<Like> likeRowMapper =

@@ -7,6 +7,7 @@ import ru.kpfu.itis.gnt.entities.Comment;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
+import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 import ru.kpfu.itis.gnt.services.CommentsService;
 
 import java.text.ParseException;
@@ -31,13 +32,13 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     public List<Comment> getComments(Post post, int limit, int offset) throws DBException {
         return commentsDao.findComments(post.getId(), limit, offset).orElseThrow(
-                () -> new DBException("There is no comments.")
+                () -> new EmptyResultDbException("There is no comments.")
         );
     }
 
     public int getCommentsCount(int post_id) throws DBException {
         return commentsDao.getCommentCount(post_id).orElseThrow(
-                () -> new DBException("There is no comments!")
+                () -> new EmptyResultDbException("There is no comments!")
         );
     }
 
@@ -59,10 +60,10 @@ public class CommentsServiceImpl implements CommentsService {
 
      почему-то не работает сортировка по дате.
      */
-    public HashMap<Comment, User> getCommentAuthors(List<Comment> comments) throws ParseException {
-        HashMap<Comment, User> commentUserHashMap = new HashMap<>();
+    public HashMap<User, Comment> getCommentAuthors(List<Comment> comments) throws EmptyResultDbException {
+        Map<User, Comment> commentUserHashMap = new HashMap<>();
         for (Comment comment : comments) {
-            commentUserHashMap.put(comment, userDao.findById(comment.getAuthor_id()).get());
+            commentUserHashMap.put(userDao.findById(comment.getAuthor_id()).get(), comment);
         }
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -76,9 +77,8 @@ public class CommentsServiceImpl implements CommentsService {
                 throw new RuntimeException(e);
             }
         };
-
         return commentUserHashMap.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey(byDate))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (el1, el2) -> el1, HashMap::new));
+                .sorted(Map.Entry.comparingByValue(byDate))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (el1, el2) -> el1, LinkedHashMap::new));
     }
 }
