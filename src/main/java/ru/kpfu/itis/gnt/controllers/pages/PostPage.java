@@ -33,7 +33,7 @@ public class PostPage extends HttpServlet {
     private User postAuthor;
     private int likeCount;
 
-    private HashMap<User, Comment> commentAuthors;
+    private HashMap<Comment, User> commentAuthors;
 
     private PostsServiceImpl postsService;
     private CommentsServiceImpl commentsService;

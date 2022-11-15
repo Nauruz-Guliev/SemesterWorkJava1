@@ -81,11 +81,11 @@
                         <div class="w-100">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h6 class="text-primary fw-bold mb-0">
-                                        ${entry.key.firstName} ${entry.key.lastName}
+                                        ${entry.value.firstName} ${entry.value.lastName}
                                 </h6>
-                                <p class="mb-0">${entry.value.created_at}</p>
+                                <p class="mb-0">${entry.key.created_at}</p>
                             </div>
-                            <span class="text-dark ms-2 m-2">${entry.value.text}</span>
+                            <span class="text-dark ms-2 m-2">${entry.key.text}</span>
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="small mb-0" style="color: #aaa;"></p>
                             </div>
@@ -104,7 +104,7 @@
             <c:forEach begin="0" end="${commentCount}" var="i" step="10">
 
                 <li class="page-item"><a class="page-link"
-                                         href="${pageContext.request.contextPath}/article?postIndex=${post.id}&offset=${i}">
+                                         href="${pageContext.request.contextPath}/post?postIndex=${post.id}&offset=${i}">
                     <fmt:formatNumber value="${(i/10)+1}" minFractionDigits="0" maxFractionDigits="0"/>
 
                 </a></li>

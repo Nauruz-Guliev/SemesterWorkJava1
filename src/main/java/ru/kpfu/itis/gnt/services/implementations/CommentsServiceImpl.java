@@ -60,25 +60,20 @@ public class CommentsServiceImpl implements CommentsService {
 
      почему-то не работает сортировка по дате.
      */
-    public HashMap<User, Comment> getCommentAuthors(List<Comment> comments) throws EmptyResultDbException {
-        Map<User, Comment> commentUserHashMap = new HashMap<>();
+    public HashMap<Comment, User> getCommentAuthors(List<Comment> comments) throws EmptyResultDbException {
+        Map<Comment, User> commentUserHashMap = new HashMap<>();
         for (Comment comment : comments) {
-            commentUserHashMap.put(userDao.findById(comment.getAuthor_id()).get(), comment);
+            commentUserHashMap.put(comment, userDao.findById(comment.getAuthor_id()).get());
         }
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
         Comparator<Comment> byDate = (Comment c1, Comment c2) -> {
-            try {
-                return formatter.parse(c1.getCreated_at().substring(0,19)).compareTo(
-                        formatter.parse(c2.getCreated_at().substring(0,19))
-                );
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
+            return (c1.getCreated_at().substring(0,19)).compareTo(
+                             (c2.getCreated_at().substring(0,19)));
         };
+
         return commentUserHashMap.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(byDate))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (el1, el2) -> el1, LinkedHashMap::new));
+                .sorted(Map.Entry.comparingByKey(byDate))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (el1, el2) -> el1, HashMap::new));
     }
 }
