@@ -52,7 +52,7 @@ public class RegistrationPage extends HttpServlet {
             initValues(request);
             if(usersService.signUp(firstName, lastName, email, password, passwordConfirm, gender, dateOfBirth, country, policeAgreement)){
 
-                RedirectHelper.forwardWithMessage(request, response, "signin",  "Registered successfully", "Success");
+                response.sendRedirect(request.getContextPath() + "/main");
 
             } else {
                 RedirectHelper.forwardWithMessage(request, response, "signin",  "Couldn't register", "Error");
