@@ -60,8 +60,9 @@ public class CreatePostPage extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            for (int i = 0; i < 4; i++) {
-                String tag = req.getParameter("tag" + ((i != 0) ? i : ""));
+            postTags.add(req.getParameter("tag"));
+            for (int i = 0; i < 5; i++) {
+                String tag = req.getParameter("tag" + i);
                 if (tag != null && tag.length() > 2) {
                     postTags.add(tag);
                 }
