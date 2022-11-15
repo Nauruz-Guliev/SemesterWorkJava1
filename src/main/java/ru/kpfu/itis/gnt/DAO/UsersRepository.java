@@ -1,6 +1,7 @@
 package ru.kpfu.itis.gnt.DAO;
 
 import ru.kpfu.itis.gnt.entities.User;
+import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.Optional;
 
 public interface UsersRepository {
     Optional<List<User>> findAll() throws EmptyResultDbException;
-    boolean saveUser(User user);
+    boolean saveUser(User user) throws DBException;
 
     boolean deleteUser(int userId);
 

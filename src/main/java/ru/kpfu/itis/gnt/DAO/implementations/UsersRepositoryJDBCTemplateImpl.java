@@ -1,5 +1,6 @@
 package ru.kpfu.itis.gnt.DAO.implementations;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -7,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import ru.kpfu.itis.gnt.DAO.UsersRepository;
 import ru.kpfu.itis.gnt.entities.User;
+import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 
 import javax.sql.DataSource;
@@ -71,17 +73,21 @@ public class UsersRepositoryJDBCTemplateImpl implements UsersRepository {
     }
 
     @Override
-    public boolean saveUser(User user) {
-        return jdbcTemplate.update(
-                SQL_INSERT_USER,
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getPassword(),
-                user.getCountry(),
-                user.getGender(),
-                user.getDateOfBirth()
-        ) > 0;
+    public boolean saveUser(User user) throws DBException {
+        try {
+            return jdbcTemplate.update(
+                    SQL_INSERT_USER,
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getPassword(),
+                    user.getCountry(),
+                    user.getGender(),
+                    user.getDateOfBirth()
+            ) > 0;
+        }catch (DuplicateKeyException ex) {
+            throw new DBException("Such a user exists");
+        }
     }
 
     @Override
