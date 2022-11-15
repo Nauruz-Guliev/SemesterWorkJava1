@@ -68,8 +68,8 @@ public class ProfilePage extends HttpServlet {
             updatedUser.setId(userId);
             usersService.updateUser(updatedUser);
             req.setAttribute(FieldsConstants.FIELD_USER, usersService.findUserById(userId));
-            RedirectHelper.forwardWithMessage(req, resp, "profile",  "Profile was updated", "Success");
-        } catch (DBException | NumberFormatException | IOException | ServletException ex) {
+            resp.sendRedirect(req.getContextPath() + "/main");
+        } catch (DBException | NumberFormatException | IOException ex) {
             RedirectHelper.forwardWithMessage(req, resp, "profile",  ex.getMessage(), ClassNameGetter.getClassName(ex.getClass().getName()));
         }
     }

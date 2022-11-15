@@ -16,8 +16,8 @@ public class DataSource{
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         Properties properties = new Properties();
 
-        try {
-            properties.load(SimpleDataSource.class.getResourceAsStream("/application.properties"));
+        try (InputStream in = Files.newInputStream(Paths.get("C:\\Windows.old\\Users\\nauru\\Desktop\\java\\java3-examples\\hwServlets\\src\\main\\properties\\db.properties"))) {
+            properties.load(in);
             dataSource.setDriverClassName(driverClassName);
             dataSource.setUrl(properties.getProperty("db.url"));
             dataSource.setUsername(properties.getProperty("db.username"));
@@ -33,7 +33,7 @@ public class DataSource{
     public Connection getPostgresDbConnection() throws DBException {
         Properties properties = new Properties();
         try {
-            properties.load(Files.newInputStream(Paths.get("C:\\Windows.old\\Users\\nauru\\Desktop\\java\\java3-examples\\hwServlets\\src\\main\\properties\\application.properties")));
+            properties.load(Files.newInputStream(Paths.get("C:\\Windows.old\\Users\\nauru\\Desktop\\java\\java3-examples\\hwServlets\\src\\main\\properties\\db.properties")));
             Class.forName("org.postgresql.Driver");
             if (connection == null) {
                 Class.forName("org.postgresql.Driver");
