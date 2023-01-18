@@ -71,6 +71,7 @@ public class PostPage extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
+            req.getSession().invalidate();
             String offset = req.getParameter("offset");
             if (offset != null) {
                 commentOffset = Integer.parseInt(offset);
@@ -86,6 +87,7 @@ public class PostPage extends HttpServlet {
             initValues();
             System.out.println("asdasd" + postTags);
             setAttributes(req);
+
             getServletContext().getRequestDispatcher("/WEB-INF/views/post.jsp").forward(req, resp);
         } catch (ParseException | ServletException | IOException | DBException ex) {
             //  RedirectHelper.redirect(req, resp, "/post", ex.getMessage());

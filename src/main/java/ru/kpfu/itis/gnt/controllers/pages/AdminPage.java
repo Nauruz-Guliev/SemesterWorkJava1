@@ -33,6 +33,7 @@ public class AdminPage extends HttpServlet {
         try {
             updateTable(request);
         } catch (DBException ex) {
+
             RedirectHelper.forwardWithMessage(request, resp, "admin", ex.getMessage(), ClassNameGetter.getClassName(ex.getClass().getName()));
         }
         getServletContext().getRequestDispatcher(PagePathConstants.ADMIN_PAGE_PATH).forward(request, resp);

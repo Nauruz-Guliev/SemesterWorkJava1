@@ -67,6 +67,7 @@ public class CreatePostPage extends HttpServlet {
                     postTags.add(tag);
                 }
             }
+
             System.out.println("TAGS "+ postTags);
             initValues(req);
             Post post = new Post(postTitle, postBody, (Integer) req.getSession().getAttribute("USER_ID"));

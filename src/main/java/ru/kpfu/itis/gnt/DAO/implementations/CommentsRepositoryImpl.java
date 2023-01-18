@@ -9,6 +9,10 @@ import ru.kpfu.itis.gnt.entities.Comment;
 import ru.kpfu.itis.gnt.exceptions.EmptyResultDbException;
 
 import javax.xml.crypto.Data;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 import javax.sql.DataSource;
@@ -55,7 +59,7 @@ public class CommentsRepositoryImpl implements CommentsRepository {
                     new Object[]{post_id},
                     Integer.class
             ));
-        }  catch (EmptyResultDataAccessException ex) {
+        } catch (EmptyResultDataAccessException ex) {
             throw new EmptyResultDbException("Couldn't get comment count");
         }
     }
@@ -74,6 +78,19 @@ public class CommentsRepositoryImpl implements CommentsRepository {
     @Override
     public boolean deleteComment(Comment comment) {
         return jdbcTemplate.update(SQL_DELETE_COMMENT, comment.getId()) > 0;
+    }
+
+    private void test() {
+        try (Connection connection = DriverManager.getConnection("");) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * from comments");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String result = resultSet.getString("");
+            }
+            InetAddress conn = InetAddress.getLocalHost();
+        } catch (SQLException | UnknownHostException ex) {
+
+        }
     }
 
     private final RowMapper<Comment> commentRowMapper =
