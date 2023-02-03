@@ -1,8 +1,8 @@
-## Overview
+## :star: Web Project for posting articles 
 
 A simple project that was made for the purpose of learning Java Servlets. It provides the functionality to publish articles and posts which further can be commented on and liked by registered users. This application is based on **Model View Controller (MVC) Architecture** made using **Java Servlets** and **Java Server Pages (JSPs)**. Additionally, it makes use of the **PostgreSQL database system** for storing data about the users and their posts and likes. It is secured against **SQL Injection** and **Cross-Site Scripting** attacks. 
 
-## Used technologies
+## 🛠 Used technologies
 
 ###### **Frontend**
 * HTML
@@ -16,19 +16,19 @@ A simple project that was made for the purpose of learning Java Servlets. It pro
 * Java Servlets
 * PostgreSQL 
 
-## Workflow (functionalities)
+## :cyclone: Workflow (functionalities)
 
 <p align="left">
    <img src="../master/images/user_workflow.png" width="600"/>
 </p>
 
-## Database Structure
+## 💾 Database Structure
 
 <p align="left">
    <img src="../master/images/db_diagram.png" width="600"/>
 </p>
 
-## Interface
+## ✨ Interface
 
 #### Sign in and Sign Up Pages
 <p align="middle">
