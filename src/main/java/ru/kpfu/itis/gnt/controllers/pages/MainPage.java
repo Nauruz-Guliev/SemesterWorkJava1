@@ -1,7 +1,6 @@
 package ru.kpfu.itis.gnt.controllers.pages;
 
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import ru.kpfu.itis.gnt.DAO.TagNamesRepository;
 import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.TagsRepositoryImpl;
@@ -11,7 +10,7 @@ import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
-import ru.kpfu.itis.gnt.validators.ClassNameGetter;
+import ru.kpfu.itis.gnt.Utils.validators.ClassNameGetter;
 
 import java.io.IOException;
 import java.util.List;

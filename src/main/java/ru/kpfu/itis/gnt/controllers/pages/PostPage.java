@@ -10,7 +10,7 @@ import ru.kpfu.itis.gnt.entities.Tag;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.implementations.*;
-import ru.kpfu.itis.gnt.validators.ClassNameGetter;
+import ru.kpfu.itis.gnt.Utils.validators.ClassNameGetter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

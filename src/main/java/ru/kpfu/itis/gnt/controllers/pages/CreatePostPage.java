@@ -11,11 +11,10 @@ import ru.kpfu.itis.gnt.constants.PagePathConstants;
 import ru.kpfu.itis.gnt.entities.Post;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
-import ru.kpfu.itis.gnt.validators.ClassNameGetter;
+import ru.kpfu.itis.gnt.Utils.validators.ClassNameGetter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

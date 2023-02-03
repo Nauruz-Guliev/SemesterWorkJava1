@@ -7,12 +7,10 @@ import ru.kpfu.itis.gnt.DAO.implementations.PostsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.TagsRepositoryImpl;
 import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.entities.Post;
-import ru.kpfu.itis.gnt.entities.Tag;
-import ru.kpfu.itis.gnt.entities.TagName;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.PostsService;
-import ru.kpfu.itis.gnt.validators.PostValidator;
+import ru.kpfu.itis.gnt.Utils.validators.PostValidator;
 
 import java.util.ArrayList;
 import java.util.List;

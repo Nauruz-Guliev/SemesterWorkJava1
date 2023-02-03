@@ -12,13 +12,13 @@
 <div id="article-div" class="card m-4">
     <form action="<c:url value="/post/create"/>" method="POST">
         <div id="create-article" class="card-body m-2">
-            <h1 class="h1">Create an article</h1>
+            <h1 class="h1">Publish an article</h1>
             <div class="mb-3">
                 <label for="titleControl" class="form-label">Article title</label>
                 <input type="text" class="form-control" id="titleControl" name="title">
             </div>
             <div class="mb-3">
-                <label for="textBodyControl" class="form-label">Example textarea</label>
+                <label for="textBodyControl" class="form-label">Body</label>
                 <textarea class="form-control" id="textBodyControl" rows="6" name="body"></textarea>
             </div>
 

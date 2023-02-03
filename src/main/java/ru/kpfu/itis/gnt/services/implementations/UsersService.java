@@ -5,10 +5,9 @@ import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.Utils.Encrypter;
 import ru.kpfu.itis.gnt.entities.User;
 import ru.kpfu.itis.gnt.exceptions.*;
-import ru.kpfu.itis.gnt.validators.RegistrationFieldsValidator;
+import ru.kpfu.itis.gnt.Utils.validators.RegistrationFieldsValidator;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

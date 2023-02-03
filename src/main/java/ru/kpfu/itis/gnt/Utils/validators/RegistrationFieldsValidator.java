@@ -1,10 +1,9 @@
-package ru.kpfu.itis.gnt.validators;
+package ru.kpfu.itis.gnt.Utils.validators;
 
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class RegistrationFieldsValidator {
     private String firstName;

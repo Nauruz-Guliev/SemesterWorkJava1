@@ -8,7 +8,7 @@ import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.exceptions.RegistrationException;
 import ru.kpfu.itis.gnt.services.implementations.UsersService;
-import ru.kpfu.itis.gnt.validators.ClassNameGetter;
+import ru.kpfu.itis.gnt.Utils.validators.ClassNameGetter;
 
 import java.io.IOException;
 

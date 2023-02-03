@@ -38,7 +38,7 @@
                     </li>
                     <li class="nav-item"><a class="nav-link" href="<c:url value="/signout"/>">Sign
                         Out</a></li>
-                    <li class="nav-item"><a class="nav-link" href="<c:url value="/post/create"/>">Create post</a>
+                    <li class="nav-item"><a class="nav-link" href="<c:url value="/post/create"/>">Publish</a>
                     </li>
                 </c:if>
 

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class DataSource{
@@ -26,6 +27,10 @@ public class DataSource{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void main(String[] args) throws SQLException {
+        System.out.println(new DataSource().getDataSource().getConnection().isClosed());
     }
 
     /*

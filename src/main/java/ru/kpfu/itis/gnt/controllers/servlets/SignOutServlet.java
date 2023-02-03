@@ -4,7 +4,7 @@ import ru.kpfu.itis.gnt.DAO.implementations.UsersRepositoryJDBCTemplateImpl;
 import ru.kpfu.itis.gnt.Utils.RedirectHelper;
 import ru.kpfu.itis.gnt.constants.ListenerConstants;
 import ru.kpfu.itis.gnt.services.implementations.UsersService;
-import ru.kpfu.itis.gnt.validators.ClassNameGetter;
+import ru.kpfu.itis.gnt.Utils.validators.ClassNameGetter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;

@@ -12,7 +12,7 @@ import ru.kpfu.itis.gnt.exceptions.DBException;
 import ru.kpfu.itis.gnt.services.implementations.CommentsServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.PostsServiceImpl;
 import ru.kpfu.itis.gnt.services.implementations.UsersService;
-import ru.kpfu.itis.gnt.validators.ClassNameGetter;
+import ru.kpfu.itis.gnt.Utils.validators.ClassNameGetter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

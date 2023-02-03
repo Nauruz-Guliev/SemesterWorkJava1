@@ -1,4 +1,4 @@
-package ru.kpfu.itis.gnt.validators;
+package ru.kpfu.itis.gnt.Utils.validators;
 
 import ru.kpfu.itis.gnt.entities.Post;
 
